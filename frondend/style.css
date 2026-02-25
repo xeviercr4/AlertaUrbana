@@ -1,0 +1,58 @@
+body{
+    font-family: Arial;
+    background:#f4f6f8;
+    margin:40px;
+}
+
+.container{
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    width:600px;
+    margin:auto;
+    box-shadow:0px 4px 10px rgba(0,0,0,0.1);
+}
+
+textarea{
+    width:100%;
+    height:100px;
+    margin-top:10px;
+}
+
+input{
+    margin-top:10px;
+}
+
+button{
+    margin-top:15px;
+    padding:12px;
+    width:100%;
+    background:#0078D4;
+    color:white;
+    border:none;
+    cursor:pointer;
+    border-radius:6px;
+}
+
+.preview{
+    margin-top:10px;
+    max-width:100%;
+    display:none;
+}
+
+.ticket{
+    margin-top:20px;
+    padding:15px;
+    border-radius:8px;
+}
+
+.ALTA{ background:#ffcccc; }
+.MEDIA{ background:#fff3cd; }
+.BAJA{ background:#d4edda; }
+
+.card{
+    background:#eef2f7;
+    padding:10px;
+    margin-top:10px;
+    border-radius:6px;
+}
