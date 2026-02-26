@@ -157,7 +157,8 @@ def analizar_imagen_bytes(image_bytes):
     response = requests.post(
         vision_url,
         headers=headers,
-        data=image_bytes
+        data=image_bytes,
+        timeout=15
     )
     print("STATUS VISION:", response.status_code)
     print("CONTENT TYPE:", response.headers.get("content-type"))
@@ -232,49 +233,40 @@ def guardar_ticket(ticket):
 # ENDPOINT PRINCIPAL
 # =====================================
 @app.post("/analizar")
-async def analizar_reporte(
+def analizar_reporte(
     texto: str = Form(...),
     imagen: UploadFile = File(None)
-):   
+):
     print("Texto recibido:", texto)
 
-    # =====================
-    # ANALISIS TEXTO
-    # =====================
     sentimiento = analizar_sentimiento(texto)
     frases_clave = extraer_frases_clave(texto)
     categoria_texto = clasificar_categoria(frases_clave)
-    categoria_imagen = None
 
-    # =====================
-    # ANALISIS IMAGEN (opcional)
-    # =====================
     categoria_imagen = None
     if imagen:
-        contenido = await imagen.read()
+        contenido = imagen.file.read()
         print("Imagen recibida:", len(contenido), "bytes")
         tags = analizar_imagen_bytes(contenido)
         categoria_imagen = clasificar_por_tags(tags)
 
-    # =====================
-    # DECISION FINAL
-    # =====================
     categoria_final = categoria_imagen or categoria_texto
+
     prioridad = calcular_prioridad(
         categoria_final,
         sentimiento,
         texto
     )
-    # =====================
-    # GENERAR TICKET
-    # =====================
+
     ticket = generar_ticket(
         categoria_final,
         prioridad,
         texto,
         imagen is not None
     )
+
     guardar_ticket(ticket)
+
     return ticket
 
 @app.get("/tickets")
