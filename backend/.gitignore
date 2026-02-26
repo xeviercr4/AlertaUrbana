@@ -6,6 +6,7 @@ __pycache__/
 # Virtual env
 venv/
 .env
+venv_python
 
 # VS Code
 .vscode/
@@ -13,3 +14,6 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
+
+#Vic Guide
+setup.txt
