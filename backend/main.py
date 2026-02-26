@@ -3,20 +3,23 @@ from urllib import response
 import uuid
 from wsgiref import headers
 
-from fastapi import FastAPI
+from pathlib import Path
+
+from fastapi import FastAPI, UploadFile, File, Form
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-from pyparsing import Optional
 import requests
 
-from fastapi import UploadFile, File, Form
-from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import json
 import os
 
 load_dotenv()
 
-DB_FILE = "tickets.json"
+BASE_DIR = Path(__file__).resolve().parent
+DB_FILE = BASE_DIR / "tickets.json"
+FRONTEND_DIR = BASE_DIR.parent / "frondend"
 
 app = FastAPI(title="SmartCity AI API")
 
@@ -272,3 +275,8 @@ def analizar_reporte(
 @app.get("/tickets")
 def obtener_tickets():
     return cargar_tickets()
+
+
+# Servir frontend estático (debe ir al final para no interceptar rutas API)
+if FRONTEND_DIR.exists():
+    app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
