@@ -138,7 +138,8 @@ async function cargarTickets() {
             html += `
                 <div class="card">
                     <b>${t.ticket_id}</b><br>
-                    ${t.categoria} — Prioridad: ${t.prioridad}
+                    ${t.categoria} — Prioridad: ${t.prioridad}<br>
+                    <small>${t.descripcion}</small>
                 </div>
             `;
         });
@@ -147,5 +148,55 @@ async function cargarTickets() {
 
     } catch (error) {
         console.error("Error cargando historial:", error);
+    }
+}
+
+
+/* =========================
+   BÚSQUEDA SEMÁNTICA
+========================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("btnBuscar").addEventListener("click", buscarTickets);
+});
+
+async function buscarTickets() {
+    const consulta = document.getElementById("consultaBusqueda").value.trim();
+    if (!consulta) return;
+
+    const contenedor = document.getElementById("resultadosBusqueda");
+    contenedor.innerHTML = "<p>Buscando...</p>";
+
+    try {
+        const response = await fetch(API + "/buscar", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ consulta })
+        });
+
+        const resultados = await response.json();
+
+        if (resultados.length === 0) {
+            contenedor.innerHTML = "<p>No se encontraron resultados.</p>";
+            return;
+        }
+
+        let html = "";
+        resultados.forEach((t, i) => {
+            html += `
+                <div class="card busqueda-resultado">
+                    <b>#${i + 1} — ${t.ticket_id}</b><br>
+                    ${t.categoria} — Prioridad: ${t.prioridad}<br>
+                    <small>${t.descripcion}</small><br>
+                    <span class="estado">${t.estado}</span>
+                </div>
+            `;
+        });
+
+        contenedor.innerHTML = html;
+
+    } catch (error) {
+        console.error("Error en búsqueda:", error);
+        contenedor.innerHTML = "<p>Error al buscar.</p>";
     }
 }

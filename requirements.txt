@@ -5,3 +5,6 @@ requests
 python-dotenv
 uvicorn
 python-multipart
+openai
+faiss-cpu
+numpy

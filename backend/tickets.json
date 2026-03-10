@@ -1,3 +1,38 @@
 [
-
+  {
+    "ticket_id": "SC-AACF8542",
+    "categoria": "BACHE",
+    "prioridad": "MEDIA",
+    "descripcion": "Hay una fuga de agua en el lado norte de la ciudad",
+    "estado": "ABIERTO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-03-09T20:18:26.271192"
+  },
+  {
+    "ticket_id": "SC-B5F03659",
+    "categoria": "BACHE",
+    "prioridad": "MEDIA",
+    "descripcion": "Esta saliendo mucha agua en una fuga por la escuela",
+    "estado": "ABIERTO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-03-09T20:19:31.883049"
+  },
+  {
+    "ticket_id": "SC-9BBC0A47",
+    "categoria": "BASURA",
+    "prioridad": "ALTA",
+    "descripcion": "Hay demasiada suciedad frente a la escuela y peligro de enfermedades para los ninos",
+    "estado": "ABIERTO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-03-09T20:20:20.232644"
+  },
+  {
+    "ticket_id": "SC-3F32F50F",
+    "categoria": "OTRO",
+    "prioridad": "BAJA",
+    "descripcion": "Se fue la electricidad en el sector sur",
+    "estado": "ABIERTO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-03-09T20:20:54.929287"
+  }
 ]

@@ -15,9 +15,13 @@ from dotenv import load_dotenv
 import json
 import os
 
-load_dotenv()
+import numpy as np
+import faiss
+from openai import OpenAI
 
 BASE_DIR = Path(__file__).resolve().parent
+load_dotenv(BASE_DIR / ".env")
+
 DB_FILE = BASE_DIR / "tickets.json"
 FRONTEND_DIR = BASE_DIR.parent / "frondend"
 
@@ -36,6 +40,17 @@ app.add_middleware(
 # ==============================
 AZURE_ENDPOINT = os.getenv("AZURE_ENDPOINT")
 AZURE_KEY = os.getenv("AZURE_KEY")
+
+# ==============================
+# CONFIGURACIÓN OPENAI
+# ==============================
+openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+EMBEDDING_MODEL = "text-embedding-3-small"
+EMBEDDING_DIM = 1536
+
+# Estado global del índice FAISS
+faiss_index: faiss.IndexFlatL2 | None = None
+indexed_tickets: list[dict] = []
 
 # =====================================
 # MODELO DE REQUEST
@@ -98,13 +113,13 @@ def extraer_frases_clave(texto: str):
 # =====================================
 def clasificar_categoria(frases_clave):
     frases = " ".join(frases_clave).lower()
-    if any(p in frases for p in ["basura", "residuos", "desechos"]):
+    if any(p in frases for p in ["basura", "residuos", "desechos", "suciedad", "escombros", "desperdicios", "reciclaje", "contenedor"]):
         return "BASURA"
-    elif any(p in frases for p in ["hueco", "bache", "carretera", "calle dañada"]):
+    elif any(p in frases for p in ["hueco", "bache", "calle dañada", "pavimento", "grieta", "hundimiento", "asfalto", "vía dañada"]):
         return "BACHE"
-    elif any(p in frases for p in ["luz", "poste", "alumbrado", "iluminación"]):
+    elif any(p in frases for p in ["luz", "poste", "alumbrado", "iluminación", "lámpara", "bombilla", "oscuro", "oscuridad", "apagón", "cable eléctrico", "farola"]):
         return "ALUMBRADO"
-    elif any(p in frases for p in ["agua", "fuga", "tubería"]):
+    elif any(p in frases for p in ["agua", "fuga", "tubería", "inundación", "alcantarilla", "drenaje", "cloaca", "caño roto", "charco"]):
         return "AGUA"
     return "OTRO"
 
@@ -188,9 +203,10 @@ def analizar_imagen_bytes(image_bytes):
 def clasificar_por_tags(tags):
     tags_texto = " ".join(tags).lower()
     scores = {
-        "BASURA": ["trash", "garbage", "waste", "litter"],
-        "BACHE": ["pothole", "hole", "crack", "asphalt", "damage"],
-        "AGUA": ["water", "pipe", "leak", "flood"]
+        "BASURA": ["trash", "garbage", "waste", "litter", "debris", "junk", "dump", "dirty", "rubbish", "pollution"],
+        "BACHE": ["pothole", "hole", "crack", "asphalt"],
+        "ALUMBRADO": ["light", "lamp", "pole", "streetlight", "cables", "lighting", "bulb", "dark", "electricity", "wire", "night", "tower"],
+        "AGUA": ["water", "pipe", "leak", "flood", "wet", "puddle", "drain", "sewer", "mud", "rain", "overflow"]
     }
     resultado = {k:0 for k in scores}
 
@@ -230,6 +246,52 @@ def guardar_ticket(ticket):
 
     with open(DB_FILE, "w", encoding="utf-8") as f:
         json.dump(tickets, f, indent=2, ensure_ascii=False)
+
+
+# =====================================
+# FUNCIONES BÚSQUEDA SEMÁNTICA (FAISS)
+# =====================================
+def obtener_embedding(texto: str) -> list[float]:
+    response = openai_client.embeddings.create(
+        input=texto,
+        model=EMBEDDING_MODEL
+    )
+    return response.data[0].embedding
+
+
+def construir_indice_faiss():
+    global faiss_index, indexed_tickets
+    tickets = cargar_tickets()
+    if not tickets:
+        faiss_index = None
+        indexed_tickets = []
+        return
+
+    descripciones = [t["descripcion"] for t in tickets]
+    embeddings = []
+    for desc in descripciones:
+        embeddings.append(obtener_embedding(desc))
+
+    matrix = np.array(embeddings, dtype="float32")
+    faiss_index = faiss.IndexFlatL2(EMBEDDING_DIM)
+    faiss_index.add(matrix)
+    indexed_tickets = tickets
+
+
+def buscar_tickets_similares(consulta: str, top_k: int = 3):
+    if faiss_index is None or faiss_index.ntotal == 0:
+        return []
+
+    query_emb = np.array([obtener_embedding(consulta)], dtype="float32")
+    distances, indices = faiss_index.search(query_emb, min(top_k, faiss_index.ntotal))
+
+    resultados = []
+    for i, idx in enumerate(indices[0]):
+        if idx < len(indexed_tickets):
+            ticket = indexed_tickets[idx].copy()
+            ticket["score"] = float(distances[0][i])
+            resultados.append(ticket)
+    return resultados
 
 
 # =====================================
@@ -275,6 +337,17 @@ def analizar_reporte(
 @app.get("/tickets")
 def obtener_tickets():
     return cargar_tickets()
+
+
+class BusquedaRequest(BaseModel):
+    consulta: str
+
+
+@app.post("/buscar")
+def buscar_tickets(req: BusquedaRequest):
+    construir_indice_faiss()
+    resultados = buscar_tickets_similares(req.consulta, top_k=3)
+    return resultados
 
 
 # Servir frontend estático (debe ir al final para no interceptar rutas API)
