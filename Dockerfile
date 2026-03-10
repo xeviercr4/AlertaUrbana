@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar código
+# Copiar código (lazy OpenAI init fix)
 COPY backend/ backend/
 COPY frondend/ frondend/
 
