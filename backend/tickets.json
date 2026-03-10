@@ -1,7 +1,7 @@
 [
   {
     "ticket_id": "SC-AACF8542",
-    "categoria": "BACHE",
+    "categoria": "AGUA",
     "prioridad": "MEDIA",
     "descripcion": "Hay una fuga de agua en el lado norte de la ciudad",
     "estado": "ABIERTO",
@@ -10,7 +10,7 @@
   },
   {
     "ticket_id": "SC-B5F03659",
-    "categoria": "BACHE",
+    "categoria": "AGUA",
     "prioridad": "MEDIA",
     "descripcion": "Esta saliendo mucha agua en una fuga por la escuela",
     "estado": "ABIERTO",
@@ -28,11 +28,371 @@
   },
   {
     "ticket_id": "SC-3F32F50F",
-    "categoria": "OTRO",
+    "categoria": "ALUMBRADO",
     "prioridad": "BAJA",
     "descripcion": "Se fue la electricidad en el sector sur",
     "estado": "ABIERTO",
     "evidencia_imagen": true,
     "fecha_creacion": "2026-03-09T20:20:54.929287"
+  },
+  {
+    "ticket_id": "SC-A1B2C301",
+    "categoria": "BACHE",
+    "prioridad": "ALTA",
+    "descripcion": "Hay un bache enorme frente a la Municipalidad que ya provocó dos accidentes de moto esta semana, el asfalto está completamente destruido y es un peligro para los peatones",
+    "estado": "ABIERTO",
+    "evidencia_imagen": false,
+    "fecha_creacion": "2026-03-08T09:15:00.000000"
+  },
+  {
+    "ticket_id": "SC-A1B2C302",
+    "categoria": "ALUMBRADO",
+    "prioridad": "ALTA",
+    "descripcion": "Todos los postes de luz de la calle principal frente al Colegio Nacional están apagados desde hace tres noches, los estudiantes que salen del turno noche caminan en completa oscuridad y hay riesgo de asaltos",
+    "estado": "ABIERTO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-03-08T10:30:00.000000"
+  },
+  {
+    "ticket_id": "SC-A1B2C303",
+    "categoria": "BASURA",
+    "prioridad": "MEDIA",
+    "descripcion": "Se acumula basura y desechos orgánicos en la esquina del Parque Central, el contenedor está desbordado y genera mal olor que afecta a los vecinos y a los niños que juegan en el parque",
+    "estado": "ABIERTO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-03-08T11:45:00.000000"
+  },
+  {
+    "ticket_id": "SC-A1B2C304",
+    "categoria": "AGUA",
+    "prioridad": "ALTA",
+    "descripcion": "Fuga de agua potable muy grande en la tubería principal frente a la tienda Raul Vega, el agua corre por toda la calle y ya está entrando a los locales comerciales vecinos causando daños",
+    "estado": "ABIERTO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-03-08T12:00:00.000000"
+  },
+  {
+    "ticket_id": "SC-A1B2C305",
+    "categoria": "BACHE",
+    "prioridad": "MEDIA",
+    "descripcion": "La calle que conecta la Escuela Primaria República con el mercado municipal tiene múltiples grietas y hundimientos, los camiones de carga han empeorado la situación",
+    "estado": "ABIERTO",
+    "evidencia_imagen": false,
+    "fecha_creacion": "2026-03-08T13:20:00.000000"
+  },
+  {
+    "ticket_id": "SC-A1B2C306",
+    "categoria": "ALUMBRADO",
+    "prioridad": "MEDIA",
+    "descripcion": "La farola del estacionamiento del Parque de los Héroes lleva dos semanas sin funcionar, la zona queda completamente oscura después de las 6 de la tarde",
+    "estado": "ABIERTO",
+    "evidencia_imagen": false,
+    "fecha_creacion": "2026-03-08T14:10:00.000000"
+  },
+  {
+    "ticket_id": "SC-A1B2C307",
+    "categoria": "BASURA",
+    "prioridad": "ALTA",
+    "descripcion": "Escombros de construcción abandonados en la vereda frente al Colegio San Martín, los estudiantes tienen que caminar por la calle para esquivarlos y es muy peligroso por el tráfico",
+    "estado": "ABIERTO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-03-08T15:30:00.000000"
+  },
+  {
+    "ticket_id": "SC-A1B2C308",
+    "categoria": "AGUA",
+    "prioridad": "MEDIA",
+    "descripcion": "La alcantarilla frente a la Municipalidad está tapada y cuando llueve se inunda toda la intersección, el agua sucia llega hasta la entrada del edificio municipal",
+    "estado": "ABIERTO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-03-08T16:00:00.000000"
+  },
+  {
+    "ticket_id": "SC-A1B2C309",
+    "categoria": "OTRO",
+    "prioridad": "BAJA",
+    "descripcion": "El semáforo de la esquina de Raul Vega está en amarillo intermitente desde el lunes, los conductores no respetan el cruce y casi atropellan a los clientes que salen de la tienda",
+    "estado": "ABIERTO",
+    "evidencia_imagen": false,
+    "fecha_creacion": "2026-03-08T17:15:00.000000"
+  },
+  {
+    "ticket_id": "SC-A1B2C310",
+    "categoria": "BASURA",
+    "prioridad": "MEDIA",
+    "descripcion": "Residuos plásticos y botellas acumulados en el canal de drenaje que pasa detrás de la Escuela Técnica Industrial, cuando llueve se desborda e inunda el patio de la escuela",
+    "estado": "ABIERTO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-03-07T08:30:00.000000"
+  },
+  {
+    "ticket_id": "SC-A1B2C311",
+    "categoria": "ALUMBRADO",
+    "prioridad": "ALTA",
+    "descripcion": "Cable eléctrico caído y expuesto en la vereda frente al Parque Infantil Los Pinos, los niños juegan cerca y es urgente que vengan a repararlo antes de que haya un accidente grave",
+    "estado": "ABIERTO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-03-07T09:45:00.000000"
+  },
+  {
+    "ticket_id": "SC-A1B2C312",
+    "categoria": "BACHE",
+    "prioridad": "MEDIA",
+    "descripcion": "Hundimiento del pavimento en la entrada del estacionamiento de la Municipalidad, los vehículos oficiales ya no pueden entrar sin dañar la suspensión",
+    "estado": "ABIERTO",
+    "evidencia_imagen": false,
+    "fecha_creacion": "2026-03-07T10:00:00.000000"
+  },
+  {
+    "ticket_id": "SC-A1B2C313",
+    "categoria": "AGUA",
+    "prioridad": "ALTA",
+    "descripcion": "Tubería rota debajo de la cancha del Colegio Bolivariano que está generando un charco permanente, los estudiantes no pueden usar la cancha y el agua está erosionando los cimientos del muro perimetral",
+    "estado": "ABIERTO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-03-07T11:30:00.000000"
+  },
+  {
+    "ticket_id": "SC-A1B2C314",
+    "categoria": "BASURA",
+    "prioridad": "BAJA",
+    "descripcion": "Contenedor de reciclaje del Parque Central no ha sido vaciado en más de una semana, ya hay bolsas de basura apiladas alrededor porque los vecinos no tienen dónde depositar sus residuos",
+    "estado": "ABIERTO",
+    "evidencia_imagen": false,
+    "fecha_creacion": "2026-03-07T12:45:00.000000"
+  },
+  {
+    "ticket_id": "SC-A1B2C315",
+    "categoria": "ALUMBRADO",
+    "prioridad": "MEDIA",
+    "descripcion": "Las luces del paso peatonal junto a Raul Vega no encienden, los clientes que cruzan la avenida de noche no son visibles para los conductores y ya hubo un incidente la semana pasada",
+    "estado": "ABIERTO",
+    "evidencia_imagen": false,
+    "fecha_creacion": "2026-03-07T14:00:00.000000"
+  },
+  {
+    "ticket_id": "SC-A1B2C316",
+    "categoria": "BACHE",
+    "prioridad": "ALTA",
+    "descripcion": "Gran bache con agua estancada en la avenida principal frente a la Escuela de Artes, las motos se caen constantemente y un repartidor se fracturó el brazo ayer por la noche",
+    "estado": "ABIERTO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-03-07T15:20:00.000000"
+  },
+  {
+    "ticket_id": "SC-A1B2C317",
+    "categoria": "AGUA",
+    "prioridad": "MEDIA",
+    "descripcion": "Goteo constante en la tubería que pasa por el techo del corredor externo del mercado municipal, el agua cae sobre los puestos de verduras y frutas y echa a perder la mercancía",
+    "estado": "ABIERTO",
+    "evidencia_imagen": false,
+    "fecha_creacion": "2026-03-07T16:40:00.000000"
+  },
+  {
+    "ticket_id": "SC-A1B2C318",
+    "categoria": "OTRO",
+    "prioridad": "MEDIA",
+    "descripcion": "Árbol de gran tamaño a punto de caerse sobre el tendido eléctrico en la calle detrás del Colegio Sagrado Corazón, las raíces levantaron la vereda y las ramas tocan los cables de alta tensión",
+    "estado": "ABIERTO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-03-06T09:00:00.000000"
+  },
+  {
+    "ticket_id": "SC-A1B2C319",
+    "categoria": "BASURA",
+    "prioridad": "ALTA",
+    "descripcion": "Desperdicios de comida y grasa acumulados en la alcantarilla junto a la plaza de comidas cerca del Parque Bolívar, el olor es insoportable y hay presencia de ratas que asustan a los visitantes",
+    "estado": "ABIERTO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-03-06T10:15:00.000000"
+  },
+  {
+    "ticket_id": "SC-A1B2C320",
+    "categoria": "ALUMBRADO",
+    "prioridad": "BAJA",
+    "descripcion": "La lámpara decorativa de la entrada de la Municipalidad parpadea constantemente durante la noche, no es urgente pero da mala imagen institucional y varios ciudadanos se han quejado",
+    "estado": "ABIERTO",
+    "evidencia_imagen": false,
+    "fecha_creacion": "2026-03-06T11:30:00.000000"
+  },
+  {
+    "ticket_id": "SC-C0E1F401",
+    "categoria": "BACHE",
+    "prioridad": "ALTA",
+    "descripcion": "Bache profundo en la avenida frente a la Municipalidad que reventó el neumático de un autobús escolar, los niños tuvieron que bajarse en plena vía y esperar otro transporte",
+    "estado": "CERRADO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-02-15T08:00:00.000000"
+  },
+  {
+    "ticket_id": "SC-C0E1F402",
+    "categoria": "AGUA",
+    "prioridad": "ALTA",
+    "descripcion": "Rotura de tubería matriz en la calle detrás de la Escuela Primaria República, el agua brotaba con fuerza e inundó los salones de primer grado durante la mañana",
+    "estado": "CERRADO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-02-16T09:30:00.000000"
+  },
+  {
+    "ticket_id": "SC-C0E1F403",
+    "categoria": "ALUMBRADO",
+    "prioridad": "MEDIA",
+    "descripcion": "Poste de alumbrado inclinado peligrosamente sobre la vereda frente a Raul Vega, fue impactado por un camión de reparto y los cables quedaron tensados",
+    "estado": "CERRADO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-02-17T10:15:00.000000"
+  },
+  {
+    "ticket_id": "SC-C0E1F404",
+    "categoria": "BASURA",
+    "prioridad": "MEDIA",
+    "descripcion": "Acumulación de bolsas de basura y cartones frente a la entrada principal del Colegio Nacional durante toda la semana de exámenes, los padres se quejaron por las condiciones insalubres",
+    "estado": "CERRADO",
+    "evidencia_imagen": false,
+    "fecha_creacion": "2026-02-18T11:00:00.000000"
+  },
+  {
+    "ticket_id": "SC-C0E1F405",
+    "categoria": "BACHE",
+    "prioridad": "MEDIA",
+    "descripcion": "Múltiples baches en la calle lateral del Parque de los Héroes que dificultaban el paso de sillas de ruedas y coches de bebé, los vecinos colocaron conos improvisados",
+    "estado": "CERRADO",
+    "evidencia_imagen": false,
+    "fecha_creacion": "2026-02-19T12:30:00.000000"
+  },
+  {
+    "ticket_id": "SC-C0E1F406",
+    "categoria": "AGUA",
+    "prioridad": "MEDIA",
+    "descripcion": "Alcantarilla desbordada en la intersección cercana al mercado municipal, las aguas servidas cubrían la calle y el olor era insoportable para comerciantes y clientes",
+    "estado": "CERRADO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-02-20T08:45:00.000000"
+  },
+  {
+    "ticket_id": "SC-C0E1F407",
+    "categoria": "ALUMBRADO",
+    "prioridad": "ALTA",
+    "descripcion": "Apagón total en las cuatro cuadras alrededor del Colegio San Martín, se reportaron dos robos a estudiantes en la oscuridad y los padres exigieron solución inmediata",
+    "estado": "CERRADO",
+    "evidencia_imagen": false,
+    "fecha_creacion": "2026-02-21T14:00:00.000000"
+  },
+  {
+    "ticket_id": "SC-C0E1F408",
+    "categoria": "BASURA",
+    "prioridad": "ALTA",
+    "descripcion": "Vertedero ilegal descubierto en el terreno baldío junto al Parque Central, los vecinos denunciaron que personas arrojaban escombros y desperdicios de restaurantes durante la noche",
+    "estado": "CERRADO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-02-22T09:20:00.000000"
+  },
+  {
+    "ticket_id": "SC-C0E1F409",
+    "categoria": "OTRO",
+    "prioridad": "MEDIA",
+    "descripcion": "Señalización de tránsito destruida en la rotonda frente a la Municipalidad después de un choque vehicular, los conductores no sabían quién tenía preferencia de paso",
+    "estado": "CERRADO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-02-23T10:40:00.000000"
+  },
+  {
+    "ticket_id": "SC-C0E1F410",
+    "categoria": "BACHE",
+    "prioridad": "ALTA",
+    "descripcion": "Hundimiento severo del asfalto frente a la tienda Raul Vega que dejó expuesta una tubería, los vehículos tenían que invadir el carril contrario para esquivarlo",
+    "estado": "CERRADO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-02-24T07:30:00.000000"
+  },
+  {
+    "ticket_id": "SC-C0E1F411",
+    "categoria": "AGUA",
+    "prioridad": "BAJA",
+    "descripcion": "Grifo público del Parque Bolívar goteaba constantemente desperdiciando agua, los vecinos reportaron que llevaba semanas así sin que nadie lo reparara",
+    "estado": "CERRADO",
+    "evidencia_imagen": false,
+    "fecha_creacion": "2026-02-25T11:15:00.000000"
+  },
+  {
+    "ticket_id": "SC-C0E1F412",
+    "categoria": "ALUMBRADO",
+    "prioridad": "MEDIA",
+    "descripcion": "Tres farolas consecutivas apagadas en el boulevard que va desde la Escuela de Artes hasta la plaza principal, zona muy transitada por jóvenes en las noches",
+    "estado": "CERRADO",
+    "evidencia_imagen": false,
+    "fecha_creacion": "2026-02-26T13:00:00.000000"
+  },
+  {
+    "ticket_id": "SC-C0E1F413",
+    "categoria": "BASURA",
+    "prioridad": "MEDIA",
+    "descripcion": "Neumáticos viejos y chatarra acumulados en la esquina trasera de la Escuela Técnica Industrial, creando un criadero de mosquitos que preocupaba al personal de salud del municipio",
+    "estado": "CERRADO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-02-27T08:00:00.000000"
+  },
+  {
+    "ticket_id": "SC-C0E1F414",
+    "categoria": "AGUA",
+    "prioridad": "ALTA",
+    "descripcion": "Inundación grave en el sótano de la Municipalidad por tubería reventada, se dañaron documentos del archivo histórico y equipos de cómputo del departamento de catastro",
+    "estado": "CERRADO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-02-28T07:00:00.000000"
+  },
+  {
+    "ticket_id": "SC-C0E1F415",
+    "categoria": "BACHE",
+    "prioridad": "MEDIA",
+    "descripcion": "Calle frente al Colegio Sagrado Corazón llena de baches que se formaron después de las lluvias de febrero, los autobuses escolares ya no querían pasar por esa ruta",
+    "estado": "CERRADO",
+    "evidencia_imagen": false,
+    "fecha_creacion": "2026-03-01T09:00:00.000000"
+  },
+  {
+    "ticket_id": "SC-C0E1F416",
+    "categoria": "ALUMBRADO",
+    "prioridad": "BAJA",
+    "descripcion": "Luz del baño público del Parque Infantil Los Pinos no funcionaba, las familias evitaban usar las instalaciones especialmente al atardecer",
+    "estado": "CERRADO",
+    "evidencia_imagen": false,
+    "fecha_creacion": "2026-03-01T10:30:00.000000"
+  },
+  {
+    "ticket_id": "SC-C0E1F417",
+    "categoria": "BASURA",
+    "prioridad": "ALTA",
+    "descripcion": "Derrame de aceite de cocina usado en la alcantarilla junto a los puestos de comida cerca de Raul Vega, la grasa solidificada bloqueó el drenaje y provocó un charco pestilente",
+    "estado": "CERRADO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-03-02T08:30:00.000000"
+  },
+  {
+    "ticket_id": "SC-C0E1F418",
+    "categoria": "OTRO",
+    "prioridad": "ALTA",
+    "descripcion": "Rama de árbol gigante cayó sobre un vehículo estacionado frente al Colegio Bolivariano durante una tormenta, bloqueó media calle y cortó cables de telecomunicaciones",
+    "estado": "CERRADO",
+    "evidencia_imagen": true,
+    "fecha_creacion": "2026-03-02T15:00:00.000000"
+  },
+  {
+    "ticket_id": "SC-C0E1F419",
+    "categoria": "AGUA",
+    "prioridad": "MEDIA",
+    "descripcion": "Fuga en la conexión de agua de los bebederos de la Escuela Primaria República, los niños no tenían acceso a agua potable durante el horario escolar y los padres llevaban bidones desde casa",
+    "estado": "CERRADO",
+    "evidencia_imagen": false,
+    "fecha_creacion": "2026-03-03T09:45:00.000000"
+  },
+  {
+    "ticket_id": "SC-C0E1F420",
+    "categoria": "BACHE",
+    "prioridad": "MEDIA",
+    "descripcion": "Pavimento deteriorado en la entrada del estacionamiento del Parque Central que causaba daños a los vehículos, se formó un charco permanente donde se reproducían mosquitos",
+    "estado": "CERRADO",
+    "evidencia_imagen": false,
+    "fecha_creacion": "2026-03-04T11:00:00.000000"
   }
 ]

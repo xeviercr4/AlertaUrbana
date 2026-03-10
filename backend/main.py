@@ -48,10 +48,6 @@ openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 EMBEDDING_MODEL = "text-embedding-3-small"
 EMBEDDING_DIM = 1536
 
-# Estado global del índice FAISS
-faiss_index: faiss.IndexFlatL2 | None = None
-indexed_tickets: list[dict] = []
-
 # =====================================
 # MODELO DE REQUEST
 # =====================================
@@ -259,13 +255,42 @@ def obtener_embedding(texto: str) -> list[float]:
     return response.data[0].embedding
 
 
-def construir_indice_faiss():
-    global faiss_index, indexed_tickets
-    tickets = cargar_tickets()
+def extraer_filtros(consulta: str):
+    """Extrae filtros estructurados de la consulta en lenguaje natural."""
+    texto = consulta.lower()
+    filtros = {}
+
+    # Estado
+    if any(p in texto for p in ["cerrado", "resuelto", "solucionado", "atendido", "reparado"]):
+        filtros["estado"] = "CERRADO"
+    elif any(p in texto for p in ["abierto", "pendiente", "sin resolver", "activo"]):
+        filtros["estado"] = "ABIERTO"
+
+    # Categoría
+    if any(p in texto for p in ["bache", "hueco", "pavimento", "asfalto", "calle dañada"]):
+        filtros["categoria"] = "BACHE"
+    elif any(p in texto for p in ["basura", "desechos", "escombros", "residuos", "suciedad"]):
+        filtros["categoria"] = "BASURA"
+    elif any(p in texto for p in ["luz", "alumbrado", "poste", "farola", "lámpara", "cable eléctrico", "electricidad", "apagón"]):
+        filtros["categoria"] = "ALUMBRADO"
+    elif any(p in texto for p in ["agua", "fuga", "tubería", "inundación", "alcantarilla", "drenaje"]):
+        filtros["categoria"] = "AGUA"
+
+    # Prioridad
+    if any(p in texto for p in ["urgente", "alta prioridad", "prioridad alta", "crítico", "grave"]):
+        filtros["prioridad"] = "ALTA"
+    elif any(p in texto for p in ["prioridad media", "media prioridad"]):
+        filtros["prioridad"] = "MEDIA"
+    elif any(p in texto for p in ["prioridad baja", "baja prioridad", "no urgente"]):
+        filtros["prioridad"] = "BAJA"
+
+    return filtros
+
+
+def construir_indice_faiss(tickets: list[dict]):
+    """Construye un índice FAISS a partir de una lista de tickets."""
     if not tickets:
-        faiss_index = None
-        indexed_tickets = []
-        return
+        return None
 
     descripciones = [t["descripcion"] for t in tickets]
     embeddings = []
@@ -273,22 +298,42 @@ def construir_indice_faiss():
         embeddings.append(obtener_embedding(desc))
 
     matrix = np.array(embeddings, dtype="float32")
-    faiss_index = faiss.IndexFlatL2(EMBEDDING_DIM)
-    faiss_index.add(matrix)
-    indexed_tickets = tickets
+    index = faiss.IndexFlatL2(EMBEDDING_DIM)
+    index.add(matrix)
+    return index
 
 
 def buscar_tickets_similares(consulta: str, top_k: int = 3):
-    if faiss_index is None or faiss_index.ntotal == 0:
+    todos = cargar_tickets()
+    if not todos:
         return []
 
+    # 1. Extraer filtros estructurados de la consulta
+    filtros = extraer_filtros(consulta)
+
+    # 2. Pre-filtrar tickets por atributos exactos
+    filtrados = todos
+    for campo, valor in filtros.items():
+        filtrados = [t for t in filtrados if t.get(campo) == valor]
+
+    # Si no quedan tickets tras filtrar, buscar en todos
+    if not filtrados:
+        filtrados = todos
+
+    # 3. Construir índice FAISS solo con los tickets filtrados
+    index = construir_indice_faiss(filtrados)
+    if index is None:
+        return []
+
+    # 4. Búsqueda semántica sobre descripciones
     query_emb = np.array([obtener_embedding(consulta)], dtype="float32")
-    distances, indices = faiss_index.search(query_emb, min(top_k, faiss_index.ntotal))
+    k = min(top_k, index.ntotal)
+    distances, indices = index.search(query_emb, k)
 
     resultados = []
     for i, idx in enumerate(indices[0]):
-        if idx < len(indexed_tickets):
-            ticket = indexed_tickets[idx].copy()
+        if idx < len(filtrados):
+            ticket = filtrados[idx].copy()
             ticket["score"] = float(distances[0][i])
             resultados.append(ticket)
     return resultados
@@ -345,7 +390,6 @@ class BusquedaRequest(BaseModel):
 
 @app.post("/buscar")
 def buscar_tickets(req: BusquedaRequest):
-    construir_indice_faiss()
     resultados = buscar_tickets_similares(req.consulta, top_k=3)
     return resultados
 
