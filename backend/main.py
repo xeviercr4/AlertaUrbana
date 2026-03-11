@@ -18,6 +18,14 @@ import os
 import numpy as np
 import faiss
 from openai import OpenAI
+import logging
+
+logger = logging.getLogger("alertaurbana")
+logger.setLevel(logging.DEBUG)
+if not logger.handlers:
+    _h = logging.StreamHandler()
+    _h.setFormatter(logging.Formatter("%(levelname)s:%(name)s:%(message)s"))
+    logger.addHandler(_h)
 
 BASE_DIR = Path(__file__).resolve().parent
 load_dotenv(BASE_DIR / ".env")
@@ -267,7 +275,7 @@ def extraer_filtros(consulta: str):
         filtros["estado"] = "ABIERTO"
 
     # Categoría
-    if any(p in texto for p in ["bache", "hueco", "pavimento", "asfalto", "calle dañada"]):
+    if any(p in texto for p in ["bache", "hueco", "pavimento", "asfalto", "calle dañada", "vial", "viales", "baches", "carretera", "hundimiento", "grieta"]):
         filtros["categoria"] = "BACHE"
     elif any(p in texto for p in ["basura", "desechos", "escombros", "residuos", "suciedad"]):
         filtros["categoria"] = "BASURA"
@@ -292,9 +300,19 @@ def construir_indice_faiss(tickets: list[dict]):
     if not tickets:
         return None
 
-    descripciones = [t["descripcion"] for t in tickets]
+    CATEGORIA_ES = {"BACHE": "bache", "BASURA": "basura", "ALUMBRADO": "alumbrado", "AGUA": "agua", "OTRO": "otro"}
+    PRIORIDAD_ES = {"ALTA": "alta", "MEDIA": "media", "BAJA": "baja"}
+    ESTADO_ES   = {"ABIERTO": "abierto", "CERRADO": "cerrado"}
+
+    descripciones = [
+        f"Reporte de {CATEGORIA_ES.get(t['categoria'], t['categoria'].lower())}, "
+        f"prioridad {PRIORIDAD_ES.get(t['prioridad'], t['prioridad'].lower())}, "
+        f"estado {ESTADO_ES.get(t['estado'], t['estado'].lower())}. {t['descripcion']}"
+        for t in tickets
+    ]
     embeddings = []
     for desc in descripciones:
+        logger.info("Indexando: %s", desc)
         embeddings.append(obtener_embedding(desc))
 
     matrix = np.array(embeddings, dtype="float32")
@@ -308,25 +326,40 @@ def buscar_tickets_similares(consulta: str, top_k: int = 3):
     if not todos:
         return []
 
-    # 1. Extraer filtros estructurados de la consulta
+    # Pre-filtrar por estado y categoría si se detectan en la consulta
     filtros = extraer_filtros(consulta)
-
-    # 2. Pre-filtrar tickets por atributos exactos
     filtrados = todos
-    for campo, valor in filtros.items():
-        filtrados = [t for t in filtrados if t.get(campo) == valor]
-
-    # Si no quedan tickets tras filtrar, buscar en todos
+    for campo in ("estado", "categoria"):
+        if campo in filtros:
+            filtrados = [t for t in filtrados if t.get(campo) == filtros[campo]]
     if not filtrados:
         filtrados = todos
 
-    # 3. Construir índice FAISS solo con los tickets filtrados
+    # Construir índice FAISS con texto enriquecido en lenguaje natural
     index = construir_indice_faiss(filtrados)
     if index is None:
         return []
 
-    # 4. Búsqueda semántica sobre descripciones
-    query_emb = np.array([obtener_embedding(consulta)], dtype="float32")
+    # Enriquecer la consulta simétricamente para alinear el espacio de embeddings
+    CATEGORIA_ES = {"BACHE": "bache", "BASURA": "basura", "ALUMBRADO": "alumbrado", "AGUA": "agua", "OTRO": "otro"}
+    PRIORIDAD_ES = {"ALTA": "alta", "MEDIA": "media", "BAJA": "baja"}
+    ESTADO_ES   = {"ABIERTO": "abierto", "CERRADO": "cerrado"}
+    prefijo = ""
+    if filtros:
+        partes = []
+        if "categoria" in filtros:
+            partes.append(f"Reporte de {CATEGORIA_ES.get(filtros['categoria'], filtros['categoria'].lower())}")
+        if "prioridad" in filtros:
+            partes.append(f"prioridad {PRIORIDAD_ES.get(filtros['prioridad'], filtros['prioridad'].lower())}")
+        if "estado" in filtros:
+            partes.append(f"estado {ESTADO_ES.get(filtros['estado'], filtros['estado'].lower())}")
+        if partes:
+            prefijo = ", ".join(partes) + ". "
+    consulta_enriquecida = prefijo + consulta
+    logger.info("Query enriquecida: %s", consulta_enriquecida)
+
+    # Búsqueda semántica con consulta enriquecida
+    query_emb = np.array([obtener_embedding(consulta_enriquecida)], dtype="float32")
     k = min(top_k, index.ntotal)
     distances, indices = index.search(query_emb, k)
 
