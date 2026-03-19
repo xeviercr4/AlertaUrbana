@@ -8,3 +8,5 @@ python-multipart
 openai
 faiss-cpu
 numpy
+pypdf
+python-docx

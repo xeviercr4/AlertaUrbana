@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartCity AI – RAG Assistant</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="rag.css" />
+</head>
+<body>
+  <!-- Navigation menu -->
+  <nav class="main-nav">
+    <div class="nav-brand">🏙️ SmartCity AI</div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">🎫 Ticket System</a>
+      <a href="rag.html" class="nav-link active">🤖 RAG Assistant</a>
+    </div>
+  </nav>
+
+  <div class="rag-container">
+    <h1>🤖 RAG Knowledge Assistant</h1>
+    <p class="rag-subtitle">Upload documents and ask questions — powered by AI retrieval</p>
+
+    <!-- Tab navigation -->
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="showTab('chat-tab', this)">💬 Chat</button>
+      <button class="tab-btn" onclick="showTab('docs-tab', this)">📄 Documents</button>
+      <button class="tab-btn" onclick="showTab('metrics-tab', this)">📊 Metrics</button>
+    </div>
+
+    <!-- ===== CHAT TAB ===== -->
+    <div id="chat-tab" class="tab-panel active">
+      <div class="chat-layout">
+        <!-- Chat messages -->
+        <div id="chat-messages" class="chat-messages">
+          <div class="chat-welcome">
+            <span class="chat-welcome-icon">🤖</span>
+            <p>Hello! I'm your RAG assistant. Upload documents in the <strong>Documents</strong> tab, then ask me anything about them.</p>
+          </div>
+        </div>
+
+        <!-- Chat input -->
+        <div class="chat-input-bar">
+          <textarea
+            id="question-input"
+            class="chat-textarea"
+            placeholder="Ask a question about your documents…"
+            rows="2"
+            onkeydown="handleChatKey(event)"
+          ></textarea>
+          <button class="btn-send" onclick="sendQuestion()" title="Send (Ctrl+Enter)">
+            ➤
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== DOCUMENTS TAB ===== -->
+    <div id="docs-tab" class="tab-panel" style="display:none">
+      <!-- Upload area -->
+      <div class="upload-area" id="upload-drop-zone">
+        <div class="upload-icon">📤</div>
+        <p class="upload-label">Drag &amp; drop a file here, or click to browse</p>
+        <p class="upload-hint">Supported: PDF, DOCX, TXT</p>
+        <input type="file" id="doc-file-input" accept=".pdf,.docx,.txt" style="display:none" onchange="uploadDocument()" />
+        <button class="btn-upload" onclick="document.getElementById('doc-file-input').click()">Choose File</button>
+      </div>
+
+      <div id="upload-status" class="upload-status" style="display:none"></div>
+
+      <!-- Document list -->
+      <h3 class="section-title">📚 Indexed Documents</h3>
+      <div id="doc-list" class="doc-list">
+        <p class="empty-state">No documents uploaded yet.</p>
+      </div>
+      <button class="btn-refresh" onclick="loadDocuments()">🔄 Refresh List</button>
+    </div>
+
+    <!-- ===== METRICS TAB ===== -->
+    <div id="metrics-tab" class="tab-panel" style="display:none">
+      <h3 class="section-title">📊 Evaluation Metrics</h3>
+      <div id="metrics-grid" class="metrics-grid">
+        <p class="empty-state">Loading metrics…</p>
+      </div>
+      <button class="btn-refresh" onclick="loadMetrics()">🔄 Refresh</button>
+    </div>
+  </div>
+
+  <script src="rag.js"></script>
+</body>
+</html>

@@ -1,0 +1,492 @@
+/* =============================================
+   RAG Assistant – additional styles
+   ============================================= */
+
+/* ---------- Navigation bar ---------- */
+.main-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #0078D4;
+  padding: 12px 24px;
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,.25);
+}
+
+.nav-brand {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: .5px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 8px;
+}
+
+.nav-link {
+  color: rgba(255,255,255,.85);
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: .9rem;
+  transition: background .2s;
+}
+
+.nav-link:hover {
+  background: rgba(255,255,255,.15);
+  color: #fff;
+}
+
+.nav-link.active {
+  background: rgba(255,255,255,.25);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ---------- RAG page layout ---------- */
+.rag-container {
+  max-width: 860px;
+  margin: 32px auto;
+  padding: 0 16px 48px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.rag-container h1 {
+  font-size: 1.8rem;
+  margin-bottom: 4px;
+  color: #0078D4;
+}
+
+.rag-subtitle {
+  color: #555;
+  margin-bottom: 24px;
+  font-size: .95rem;
+}
+
+/* ---------- Tab bar ---------- */
+.tab-bar {
+  display: flex;
+  gap: 4px;
+  border-bottom: 2px solid #e0e0e0;
+  margin-bottom: 24px;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 10px 20px;
+  font-size: .95rem;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  color: #555;
+  border-radius: 4px 4px 0 0;
+  transition: all .2s;
+}
+
+.tab-btn:hover {
+  background: #f0f4f8;
+  color: #0078D4;
+}
+
+.tab-btn.active {
+  border-bottom-color: #0078D4;
+  color: #0078D4;
+  font-weight: 600;
+}
+
+/* ---------- Chat ---------- */
+.chat-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.chat-messages {
+  min-height: 380px;
+  max-height: 520px;
+  overflow-y: auto;
+  border: 1px solid #dde3ea;
+  border-radius: 10px;
+  padding: 16px;
+  background: #fafbfc;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.chat-welcome {
+  text-align: center;
+  padding: 32px 16px;
+  color: #666;
+}
+
+.chat-welcome-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 12px;
+}
+
+/* Message bubbles */
+.msg {
+  max-width: 88%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  line-height: 1.55;
+  font-size: .92rem;
+}
+
+.msg-user {
+  align-self: flex-end;
+  background: #0078D4;
+  color: #fff;
+  border-bottom-right-radius: 2px;
+}
+
+.msg-bot {
+  align-self: flex-start;
+  background: #fff;
+  border: 1px solid #dde3ea;
+  border-bottom-left-radius: 2px;
+}
+
+.msg-loading {
+  align-self: flex-start;
+  background: #f0f4f8;
+  color: #888;
+  font-style: italic;
+}
+
+/* Answer text */
+.msg-answer {
+  white-space: pre-wrap;
+  margin-bottom: 12px;
+}
+
+/* Sources section inside bot message */
+.msg-sources {
+  border-top: 1px solid #e0e0e0;
+  padding-top: 10px;
+  margin-top: 10px;
+}
+
+.msg-sources summary {
+  font-weight: 600;
+  cursor: pointer;
+  font-size: .85rem;
+  color: #0078D4;
+  margin-bottom: 6px;
+}
+
+.source-chip {
+  display: inline-block;
+  background: #e8f0fe;
+  color: #0078D4;
+  font-size: .78rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin: 2px 4px 2px 0;
+}
+
+.source-excerpt {
+  font-size: .82rem;
+  color: #444;
+  background: #f8f8f8;
+  border-left: 3px solid #0078D4;
+  padding: 6px 10px;
+  margin: 6px 0;
+  border-radius: 0 6px 6px 0;
+  white-space: pre-wrap;
+}
+
+/* Feedback buttons */
+.msg-feedback {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  align-items: center;
+}
+
+.btn-feedback {
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: .82rem;
+  cursor: pointer;
+  transition: all .15s;
+}
+
+.btn-feedback:hover {
+  border-color: #0078D4;
+  color: #0078D4;
+}
+
+.btn-feedback.voted-like {
+  background: #d4edda;
+  border-color: #28a745;
+  color: #155724;
+}
+
+.btn-feedback.voted-dislike {
+  background: #f8d7da;
+  border-color: #dc3545;
+  color: #721c24;
+}
+
+.feedback-comment-area {
+  display: none;
+  margin-top: 8px;
+}
+
+.feedback-comment-area textarea {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: .85rem;
+  resize: vertical;
+  min-height: 56px;
+  box-sizing: border-box;
+}
+
+.btn-comment-submit {
+  margin-top: 4px;
+  padding: 4px 12px;
+  font-size: .82rem;
+  background: #0078D4;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Chat input bar */
+.chat-input-bar {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.chat-textarea {
+  flex: 1;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: .95rem;
+  resize: vertical;
+  font-family: inherit;
+  transition: border-color .2s;
+}
+
+.chat-textarea:focus {
+  outline: none;
+  border-color: #0078D4;
+}
+
+.btn-send {
+  background: #0078D4;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  align-self: flex-end;
+  transition: background .2s;
+}
+
+.btn-send:hover {
+  background: #005a9e;
+}
+
+/* ---------- Upload area ---------- */
+.upload-area {
+  border: 2px dashed #aac0d8;
+  border-radius: 12px;
+  text-align: center;
+  padding: 40px 24px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  background: #f5f9ff;
+  transition: border-color .2s, background .2s;
+}
+
+.upload-area.drag-over {
+  border-color: #0078D4;
+  background: #e8f0fe;
+}
+
+.upload-icon {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.upload-label {
+  font-size: 1rem;
+  color: #333;
+  margin: 4px 0;
+}
+
+.upload-hint {
+  font-size: .85rem;
+  color: #777;
+  margin-bottom: 16px;
+}
+
+.btn-upload {
+  background: #0078D4;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: .95rem;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.btn-upload:hover {
+  background: #005a9e;
+}
+
+/* Upload status banner */
+.upload-status {
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: .9rem;
+  margin-bottom: 16px;
+}
+
+.upload-status.success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.upload-status.error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.upload-status.loading {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+
+/* ---------- Document list ---------- */
+.doc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.doc-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid #dde3ea;
+  border-radius: 10px;
+  padding: 12px 16px;
+  background: #fff;
+}
+
+.doc-icon {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.doc-info {
+  flex: 1;
+}
+
+.doc-name {
+  font-weight: 600;
+  font-size: .95rem;
+  color: #222;
+}
+
+.doc-meta {
+  font-size: .8rem;
+  color: #777;
+  margin-top: 2px;
+}
+
+.btn-delete {
+  background: none;
+  border: 1px solid #e07070;
+  color: #c0392b;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: .82rem;
+  cursor: pointer;
+  transition: all .15s;
+  flex-shrink: 0;
+}
+
+.btn-delete:hover {
+  background: #f8d7da;
+}
+
+/* ---------- Metrics ---------- */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.metric-card {
+  border: 1px solid #dde3ea;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  background: #fff;
+}
+
+.metric-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0078D4;
+}
+
+.metric-label {
+  font-size: .82rem;
+  color: #666;
+  margin-top: 4px;
+}
+
+/* ---------- Common helpers ---------- */
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin: 16px 0 10px;
+}
+
+.btn-refresh {
+  background: #f0f4f8;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: .88rem;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+.btn-refresh:hover {
+  background: #dde3ea;
+}
+
+.empty-state {
+  color: #888;
+  font-style: italic;
+  font-size: .9rem;
+  padding: 16px 0;
+}
