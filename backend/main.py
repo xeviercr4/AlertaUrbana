@@ -5,20 +5,33 @@ from wsgiref import headers
 
 from pathlib import Path
 
-from fastapi import FastAPI, UploadFile, File, Form
+from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 import requests
 
 from dotenv import load_dotenv
 import json
 import os
+import shutil
 
 import numpy as np
 import faiss
 from openai import OpenAI
 import logging
+
+from backend.rag import (
+    procesar_documento,
+    consultar_rag,
+    cargar_documentos,
+    eliminar_documento,
+    registrar_feedback,
+    cargar_feedback,
+    obtener_metricas,
+    DOCS_DIR,
+)
 
 logger = logging.getLogger("alertaurbana")
 logger.setLevel(logging.DEBUG)
@@ -32,6 +45,9 @@ load_dotenv(BASE_DIR / ".env")
 
 DB_FILE = BASE_DIR / "tickets.json"
 FRONTEND_DIR = BASE_DIR.parent / "frondend"
+
+# Crear directorio de documentos si no existe
+DOCS_DIR.mkdir(parents=True, exist_ok=True)
 
 app = FastAPI(title="SmartCity AI API")
 
@@ -52,9 +68,16 @@ AZURE_KEY = os.getenv("AZURE_KEY")
 # ==============================
 # CONFIGURACIÓN OPENAI
 # ==============================
-openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+openai_client = None
 EMBEDDING_MODEL = "text-embedding-3-small"
 EMBEDDING_DIM = 1536
+
+
+def get_openai_client():
+    global openai_client
+    if openai_client is None:
+        openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    return openai_client
 
 # =====================================
 # MODELO DE REQUEST
@@ -256,7 +279,7 @@ def guardar_ticket(ticket):
 # FUNCIONES BÚSQUEDA SEMÁNTICA (FAISS)
 # =====================================
 def obtener_embedding(texto: str) -> list[float]:
-    response = openai_client.embeddings.create(
+    response = get_openai_client().embeddings.create(
         input=texto,
         model=EMBEDDING_MODEL
     )
@@ -425,6 +448,96 @@ class BusquedaRequest(BaseModel):
 def buscar_tickets(req: BusquedaRequest):
     resultados = buscar_tickets_similares(req.consulta, top_k=3)
     return resultados
+
+
+# =====================================
+# ENDPOINTS RAG - DOCUMENTOS
+# =====================================
+@app.post("/rag/documentos/subir")
+async def subir_documento(archivo: UploadFile = File(...)):
+    """Sube un documento (PDF, DOCX, TXT), lo procesa e indexa."""
+    extensiones_validas = {".pdf", ".docx", ".txt"}
+    sufijo = Path(archivo.filename).suffix.lower()
+
+    if sufijo not in extensiones_validas:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Formato no soportado: {sufijo}. Use: {', '.join(extensiones_validas)}"
+        )
+
+    # Guardar archivo
+    ruta_destino = DOCS_DIR / archivo.filename
+    with open(ruta_destino, "wb") as f:
+        contenido = await archivo.read()
+        f.write(contenido)
+
+    try:
+        doc = procesar_documento(ruta_destino, archivo.filename)
+        return doc
+    except Exception as e:
+        # Limpiar archivo si falla el procesamiento
+        if ruta_destino.exists():
+            ruta_destino.unlink()
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/rag/documentos")
+def listar_documentos():
+    """Lista todos los documentos indexados."""
+    return cargar_documentos()
+
+
+@app.delete("/rag/documentos/{doc_id}")
+def borrar_documento(doc_id: str):
+    """Elimina un documento y sus chunks."""
+    if eliminar_documento(doc_id):
+        return {"mensaje": f"Documento {doc_id} eliminado correctamente."}
+    raise HTTPException(status_code=404, detail="Documento no encontrado.")
+
+
+# =====================================
+# ENDPOINTS RAG - CHAT
+# =====================================
+class ChatRequest(BaseModel):
+    pregunta: str
+    top_k: int = 5
+
+
+@app.post("/rag/chat")
+def chat_rag(req: ChatRequest):
+    """Consulta RAG: pregunta -> retrieval -> generación."""
+    resultado = consultar_rag(req.pregunta, top_k=req.top_k)
+    return resultado
+
+
+# =====================================
+# ENDPOINTS RAG - FEEDBACK
+# =====================================
+class FeedbackRequest(BaseModel):
+    interaction_id: str
+    tipo: str  # "like", "dislike", "comentario"
+    comentario: str = ""
+
+
+@app.post("/rag/feedback")
+def enviar_feedback(req: FeedbackRequest):
+    """Registra feedback para una interacción."""
+    if req.tipo not in ("like", "dislike", "comentario"):
+        raise HTTPException(status_code=400, detail="Tipo debe ser: like, dislike, comentario")
+    fb = registrar_feedback(req.interaction_id, req.tipo, req.comentario)
+    return fb
+
+
+@app.get("/rag/feedback")
+def listar_feedback():
+    """Lista todo el feedback registrado."""
+    return cargar_feedback()
+
+
+@app.get("/rag/metricas")
+def metricas_rag():
+    """Devuelve métricas de calidad del sistema RAG."""
+    return obtener_metricas()
 
 
 # Servir frontend estático (debe ir al final para no interceptar rutas API)

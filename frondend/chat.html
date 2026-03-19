@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAG Chat - Smart City IA</title>
+<link rel="stylesheet" href="rag-style.css">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <a href="/">Reportes</a>
+    <a href="/chat.html" class="active">Chat RAG</a>
+    <a href="/documentos.html">Documentos</a>
+</nav>
+
+<div class="container">
+
+<h1>Chat RAG</h1>
+<p>Haz preguntas sobre los documentos cargados en el sistema.</p>
+
+<div id="chatMessages" class="chat-messages">
+    <div class="message sistema">
+        Bienvenido al sistema RAG. Sube documentos en la sección
+        <a href="/documentos.html">Documentos</a> y luego haz preguntas aqui.
+    </div>
+</div>
+
+<div class="chat-input-area">
+    <input type="text" id="inputPregunta" placeholder="Escribe tu pregunta..." autocomplete="off">
+    <button id="btnEnviar">Enviar</button>
+</div>
+
+<!-- Métricas -->
+<div class="metricas-section">
+    <h3>Metricas del sistema</h3>
+    <div id="metricas" class="metricas-grid">
+        <div class="metrica-card">
+            <span class="metrica-valor" id="metTotal">-</span>
+            <span class="metrica-label">Total</span>
+        </div>
+        <div class="metrica-card positivo">
+            <span class="metrica-valor" id="metLikes">-</span>
+            <span class="metrica-label">Likes</span>
+        </div>
+        <div class="metrica-card negativo">
+            <span class="metrica-valor" id="metDislikes">-</span>
+            <span class="metrica-label">Dislikes</span>
+        </div>
+        <div class="metrica-card">
+            <span class="metrica-valor" id="metTasaLikes">-</span>
+            <span class="metrica-label">% Positivo</span>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<script src="chat.js"></script>
+
+</body>
+</html>

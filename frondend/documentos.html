@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestion Documental - Smart City IA</title>
+<link rel="stylesheet" href="rag-style.css">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <a href="/">Reportes</a>
+    <a href="/chat.html">Chat RAG</a>
+    <a href="/documentos.html" class="active">Documentos</a>
+</nav>
+
+<div class="container">
+
+<h1>Gestion Documental</h1>
+<p>Sube documentos PDF, DOCX o TXT para alimentar el sistema RAG.</p>
+
+<!-- Upload -->
+<div class="upload-section">
+    <h3>Subir documento</h3>
+    <div class="upload-area" id="uploadArea">
+        <p>Arrastra un archivo aqui o haz clic para seleccionar</p>
+        <p class="upload-hint">Formatos: PDF, DOCX, TXT</p>
+        <input type="file" id="inputArchivo" accept=".pdf,.docx,.txt" hidden>
+    </div>
+    <div id="uploadProgress" class="upload-progress" style="display:none;">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <span id="uploadStatus">Procesando...</span>
+    </div>
+</div>
+
+<!-- Documentos cargados -->
+<div class="docs-section">
+    <h3>Documentos indexados</h3>
+    <button class="btn-secondary" onclick="cargarDocumentos()">Actualizar lista</button>
+    <div id="listaDocumentos">
+        <p class="empty-state">Cargando documentos...</p>
+    </div>
+</div>
+
+<!-- Estadísticas -->
+<div class="stats-section">
+    <h3>Estadisticas</h3>
+    <div class="stats-grid" id="stats">
+        <div class="stat-card">
+            <span class="stat-valor" id="statDocs">0</span>
+            <span class="stat-label">Documentos</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-valor" id="statChunks">0</span>
+            <span class="stat-label">Fragmentos</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-valor" id="statCaracteres">0</span>
+            <span class="stat-label">Caracteres</span>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<script src="documentos.js"></script>
+
+</body>
+</html>

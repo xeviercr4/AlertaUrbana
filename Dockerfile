@@ -11,12 +11,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar código (lazy OpenAI init fix)
+# Copiar código
 COPY backend/ backend/
 COPY frondend/ frondend/
 
-# Crear archivo de tickets vacío
-RUN echo "[]" > backend/tickets.json
+# Crear archivos de datos vacíos
+RUN echo "[]" > backend/tickets.json && \
+    echo "[]" > backend/documents.json && \
+    echo "[]" > backend/chunks.json && \
+    echo "[]" > backend/feedback.json && \
+    mkdir -p backend/documentos
 
 # Railway inyecta PORT automáticamente
 ENV PORT=8000

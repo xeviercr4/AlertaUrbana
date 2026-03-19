@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker build -t alerta-urbana .)",
+      "Bash(docker build -q -t alerta-urbana .)",
+      "Bash(docker run -d --name alerta-test -p 8000:8000 -e AZURE_ENDPOINT=https://test.cognitiveservices.azure.com -e AZURE_KEY=test alerta-urbana)",
+      "Bash(curl -s http://localhost:8000/)",
+      "Bash(docker stop alerta-test)",
+      "Bash(docker rm alerta-test)",
+      "Bash(docker run -d --name alerta-test -p 8000:8000 -e AZURE_ENDPOINT=https://test.cognitiveservices.azure.com -e AZURE_KEY=test -e OPENAI_API_KEY=test alerta-urbana)",
+      "Bash(curl -s http://localhost:8000/docs)",
+      "Bash(curl -s http://localhost:8000/tickets)",
+      "Bash(docker run --rm -e AZURE_ENDPOINT=https://test.cognitiveservices.azure.com -e AZURE_KEY=test alerta-urbana python -c \"from openai import OpenAI; c = OpenAI\\(api_key=None\\); print\\(''OK''\\)\")",
+      "Bash(grep -E \"\\\\.\\(py|js|ts|json|txt|yml|yaml|md\\)$\")",
+      "Bash(python -c \"from backend.rag import procesar_documento, consultar_rag, cargar_documentos, eliminar_documento, registrar_feedback, cargar_feedback, obtener_metricas, DOCS_DIR; print\\(''RAG module OK''\\); print\\(''DOCS_DIR:'', DOCS_DIR\\)\")",
+      "Bash(python -c \"from backend.rag import procesar_documento, consultar_rag, cargar_documentos, eliminar_documento, registrar_feedback, cargar_feedback, obtener_metricas, DOCS_DIR; print\\(''RAG module OK''\\)\")",
+      "Bash(pip install:*)",
+      "Bash(python -c \"from backend.rag import procesar_documento, consultar_rag, cargar_documentos, eliminar_documento, registrar_feedback, cargar_feedback, obtener_metricas, DOCS_DIR; print\\(''RAG module: OK''\\)\")",
+      "Bash(python -c \"from backend.main import app; print\\(''Main app: OK''\\)\")",
+      "Bash(python -c \"import ast; ast.parse\\(open\\(''backend/main.py''\\).read\\(\\)\\); print\\(''main.py syntax: OK''\\)\")",
+      "Bash(python -c \"import ast; ast.parse\\(open\\(''backend/rag.py''\\).read\\(\\)\\); print\\(''rag.py syntax: OK''\\)\")"
+    ]
+  }
+}
