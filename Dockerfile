@@ -15,8 +15,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY backend/ backend/
 COPY frondend/ frondend/
 
-# Crear archivo de tickets vacío
-RUN echo "[]" > backend/tickets.json
+# Crear archivo de tickets vacío y directorio de datos RAG
+RUN echo "[]" > backend/tickets.json && \
+    mkdir -p backend/rag_data/vector_store
 
 # Railway inyecta PORT automáticamente
 ENV PORT=8000

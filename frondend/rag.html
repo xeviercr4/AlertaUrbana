@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartCity AI – Asistente RAG</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="rag.css" />
+</head>
+<body>
+  <!-- Navigation menu -->
+  <nav class="main-nav">
+    <div class="nav-brand">🏙️ SmartCity AI</div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">🎫 Sistema de Tickets</a>
+      <a href="rag.html" class="nav-link active">🤖 Asistente IA</a>
+    </div>
+  </nav>
+
+  <div class="rag-container">
+    <h1>🤖 Asistente de Conocimiento IA</h1>
+    <p class="rag-subtitle">Sube documentos y haz preguntas — impulsado por recuperación de información con IA</p>
+
+    <!-- Tab navigation -->
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="showTab('chat-tab', this)">💬 Chat</button>
+      <button class="tab-btn" onclick="showTab('docs-tab', this)">📄 Documentos</button>
+      <button class="tab-btn" onclick="showTab('metrics-tab', this)">📊 Métricas</button>
+    </div>
+
+    <!-- ===== CHAT TAB ===== -->
+    <div id="chat-tab" class="tab-panel active">
+      <div class="chat-layout">
+        <!-- Chat messages -->
+        <div id="chat-messages" class="chat-messages">
+          <div class="chat-welcome">
+            <span class="chat-welcome-icon">🤖</span>
+            <p>¡Hola! Soy tu asistente IA. Sube documentos en la pestaña <strong>Documentos</strong> y luego pregúntame lo que quieras sobre ellos.</p>
+          </div>
+        </div>
+
+        <!-- Chat input -->
+        <div class="chat-input-bar">
+          <textarea
+            id="question-input"
+            class="chat-textarea"
+            placeholder="Escribe tu pregunta sobre los documentos…"
+            rows="4"
+            onkeydown="handleChatKey(event)"
+          ></textarea>
+          <button class="btn-send" onclick="sendQuestion()" title="Enviar (Ctrl+Enter)">
+            Enviar ➤
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== DOCUMENTS TAB ===== -->
+    <div id="docs-tab" class="tab-panel" style="display:none">
+      <!-- Upload area -->
+      <div class="upload-area" id="upload-drop-zone">
+        <div class="upload-icon">📤</div>
+        <p class="upload-label">Arrastra y suelta un archivo aquí, o haz clic para buscar</p>
+        <p class="upload-hint">Formatos admitidos: PDF, DOCX, TXT</p>
+        <input type="file" id="doc-file-input" accept=".pdf,.docx,.txt" style="display:none" onchange="uploadDocument()" />
+        <button class="btn-upload" onclick="document.getElementById('doc-file-input').click()">Seleccionar archivo</button>
+      </div>
+
+      <div id="upload-status" class="upload-status" style="display:none"></div>
+
+      <!-- Document list -->
+      <h3 class="section-title">📚 Documentos Indexados</h3>
+      <div id="doc-list" class="doc-list">
+        <p class="empty-state">Aún no se han subido documentos.</p>
+      </div>
+      <button class="btn-refresh" onclick="loadDocuments()">🔄 Actualizar lista</button>
+    </div>
+
+    <!-- ===== METRICS TAB ===== -->
+    <div id="metrics-tab" class="tab-panel" style="display:none">
+      <h3 class="section-title">📊 Métricas de Evaluación</h3>
+      <div id="metrics-grid" class="metrics-grid">
+        <p class="empty-state">Cargando métricas…</p>
+      </div>
+      <button class="btn-refresh" onclick="loadMetrics()">🔄 Actualizar</button>
+    </div>
+  </div>
+
+  <script src="rag.js"></script>
+</body>
+</html>

@@ -35,6 +35,15 @@ FRONTEND_DIR = BASE_DIR.parent / "frondend"
 
 app = FastAPI(title="SmartCity AI API")
 
+# RAG router – handle both `uvicorn backend.main:app` (project root) and
+# `uvicorn main:app` (inside backend/) launch patterns.
+try:
+    from backend.rag.router import router as rag_router
+except ImportError:
+    from rag.router import router as rag_router
+
+app.include_router(rag_router)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # permitir frontend

@@ -19,3 +19,10 @@ Thumbs.db
 
 #Vic Guide
 setup.txt
+
+# RAG data – uploaded documents and generated vector store (runtime data)
+backend/rag_data/vector_store/
+backend/rag_data/documents/
+backend/rag_data/feedback.json
+backend/rag_data/interactions.json
+backend/rag_data/documents.json
