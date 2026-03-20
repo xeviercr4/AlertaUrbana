@@ -268,8 +268,8 @@
 /* Chat input bar */
 .chat-input-bar {
   display: flex;
+  flex-direction: column;
   gap: 8px;
-  align-items: flex-end;
 }
 
 .chat-textarea {
@@ -281,6 +281,8 @@
   resize: vertical;
   font-family: inherit;
   transition: border-color .2s;
+  height: auto;
+  min-height: 90px;
 }
 
 .chat-textarea:focus {
@@ -294,9 +296,9 @@
   border: none;
   border-radius: 8px;
   padding: 10px 18px;
-  font-size: 1.1rem;
+  font-size: 1rem;
   cursor: pointer;
-  align-self: flex-end;
+  width: 100%;
   transition: background .2s;
 }
 
@@ -428,6 +430,8 @@
   cursor: pointer;
   transition: all .15s;
   flex-shrink: 0;
+  width: auto;
+  white-space: nowrap;
 }
 
 .btn-delete:hover {
