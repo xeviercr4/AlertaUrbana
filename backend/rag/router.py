@@ -163,6 +163,14 @@ def query_rag(req: QueryRequest):
 
     answer = generate_answer(req.question, raw_chunks)
 
+    # Confidence: FAISS IndexFlatL2 returns squared L2 distances.
+    # For unit-norm embeddings: cos_sim = 1 - dist²/2 (clamped to [0,1]).
+    if sources:
+        avg_sim = sum(max(0.0, 1.0 - s.score / 2.0) for s in sources) / len(sources)
+        confidence = round(min(1.0, avg_sim), 3)
+    else:
+        confidence = 0.0
+
     interaction_id = str(uuid.uuid4())
     interaction = {
         "interaction_id": interaction_id,
@@ -178,6 +186,7 @@ def query_rag(req: QueryRequest):
         question=req.question,
         answer=answer,
         sources=sources,
+        confidence=confidence,
     )
 
 

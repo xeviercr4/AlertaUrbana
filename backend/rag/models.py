@@ -35,6 +35,7 @@ class QueryResponse(BaseModel):
     question: str
     answer: str
     sources: list[ChunkResult]
+    confidence: float  # 0.0 – 1.0, derived from retrieval similarity
 
 
 class MetricsResponse(BaseModel):

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SmartCity AI – RAG Assistant</title>
+  <title>SmartCity AI – Asistente RAG</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="rag.css" />
 </head>
@@ -12,20 +12,20 @@
   <nav class="main-nav">
     <div class="nav-brand">🏙️ SmartCity AI</div>
     <div class="nav-links">
-      <a href="index.html" class="nav-link">🎫 Ticket System</a>
-      <a href="rag.html" class="nav-link active">🤖 RAG Assistant</a>
+      <a href="index.html" class="nav-link">🎫 Sistema de Tickets</a>
+      <a href="rag.html" class="nav-link active">🤖 Asistente IA</a>
     </div>
   </nav>
 
   <div class="rag-container">
-    <h1>🤖 RAG Knowledge Assistant</h1>
-    <p class="rag-subtitle">Upload documents and ask questions — powered by AI retrieval</p>
+    <h1>🤖 Asistente de Conocimiento IA</h1>
+    <p class="rag-subtitle">Sube documentos y haz preguntas — impulsado por recuperación de información con IA</p>
 
     <!-- Tab navigation -->
     <div class="tab-bar">
       <button class="tab-btn active" onclick="showTab('chat-tab', this)">💬 Chat</button>
-      <button class="tab-btn" onclick="showTab('docs-tab', this)">📄 Documents</button>
-      <button class="tab-btn" onclick="showTab('metrics-tab', this)">📊 Metrics</button>
+      <button class="tab-btn" onclick="showTab('docs-tab', this)">📄 Documentos</button>
+      <button class="tab-btn" onclick="showTab('metrics-tab', this)">📊 Métricas</button>
     </div>
 
     <!-- ===== CHAT TAB ===== -->
@@ -35,7 +35,7 @@
         <div id="chat-messages" class="chat-messages">
           <div class="chat-welcome">
             <span class="chat-welcome-icon">🤖</span>
-            <p>Hello! I'm your RAG assistant. Upload documents in the <strong>Documents</strong> tab, then ask me anything about them.</p>
+            <p>¡Hola! Soy tu asistente IA. Sube documentos en la pestaña <strong>Documentos</strong> y luego pregúntame lo que quieras sobre ellos.</p>
           </div>
         </div>
 
@@ -44,12 +44,12 @@
           <textarea
             id="question-input"
             class="chat-textarea"
-            placeholder="Ask a question about your documents…"
+            placeholder="Escribe tu pregunta sobre los documentos…"
             rows="4"
             onkeydown="handleChatKey(event)"
           ></textarea>
-          <button class="btn-send" onclick="sendQuestion()" title="Send (Ctrl+Enter)">
-            Send ➤
+          <button class="btn-send" onclick="sendQuestion()" title="Enviar (Ctrl+Enter)">
+            Enviar ➤
           </button>
         </div>
       </div>
@@ -60,29 +60,29 @@
       <!-- Upload area -->
       <div class="upload-area" id="upload-drop-zone">
         <div class="upload-icon">📤</div>
-        <p class="upload-label">Drag &amp; drop a file here, or click to browse</p>
-        <p class="upload-hint">Supported: PDF, DOCX, TXT</p>
+        <p class="upload-label">Arrastra y suelta un archivo aquí, o haz clic para buscar</p>
+        <p class="upload-hint">Formatos admitidos: PDF, DOCX, TXT</p>
         <input type="file" id="doc-file-input" accept=".pdf,.docx,.txt" style="display:none" onchange="uploadDocument()" />
-        <button class="btn-upload" onclick="document.getElementById('doc-file-input').click()">Choose File</button>
+        <button class="btn-upload" onclick="document.getElementById('doc-file-input').click()">Seleccionar archivo</button>
       </div>
 
       <div id="upload-status" class="upload-status" style="display:none"></div>
 
       <!-- Document list -->
-      <h3 class="section-title">📚 Indexed Documents</h3>
+      <h3 class="section-title">📚 Documentos Indexados</h3>
       <div id="doc-list" class="doc-list">
-        <p class="empty-state">No documents uploaded yet.</p>
+        <p class="empty-state">Aún no se han subido documentos.</p>
       </div>
-      <button class="btn-refresh" onclick="loadDocuments()">🔄 Refresh List</button>
+      <button class="btn-refresh" onclick="loadDocuments()">🔄 Actualizar lista</button>
     </div>
 
     <!-- ===== METRICS TAB ===== -->
     <div id="metrics-tab" class="tab-panel" style="display:none">
-      <h3 class="section-title">📊 Evaluation Metrics</h3>
+      <h3 class="section-title">📊 Métricas de Evaluación</h3>
       <div id="metrics-grid" class="metrics-grid">
-        <p class="empty-state">Loading metrics…</p>
+        <p class="empty-state">Cargando métricas…</p>
       </div>
-      <button class="btn-refresh" onclick="loadMetrics()">🔄 Refresh</button>
+      <button class="btn-refresh" onclick="loadMetrics()">🔄 Actualizar</button>
     </div>
   </div>
 
