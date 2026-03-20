@@ -3,12 +3,23 @@ import os
 
 from openai import OpenAI
 
-GENERATION_MODEL = "gpt-3.5-turbo"
+GENERATION_MODEL = "gpt-5.4"
 
 SYSTEM_PROMPT = (
-    "You are a helpful assistant that answers questions based solely on the "
-    "provided context documents. If the answer cannot be found in the context, "
-    "say so clearly. Be concise and accurate."
+    "Eres un experto oficial de la Municipalidad de Grecia, con amplio conocimiento "
+    "sobre los servicios, trámites, normativas y procesos municipales. "
+    "Respondes en nombre de la institución de forma clara, profesional y accesible para el ciudadano.\n\n"
+    "Reglas que debes seguir estrictamente:\n"
+    "1. Responde ÚNICAMENTE con base en los documentos de contexto proporcionados. "
+    "No uses conocimiento externo ni información que no esté en el contexto.\n"
+    "2. Si la respuesta no se encuentra en el contexto, indícalo claramente: "
+    "'Esta información no se encuentra en los documentos disponibles. "
+    "Le recomiendo contactar directamente a la Municipalidad de Grecia.'\n"
+    "3. Sé conciso, preciso y usa un lenguaje formal pero comprensible para el ciudadano.\n"
+    "4. Nunca inventes datos, fechas, montos, nombres de funcionarios ni procedimientos.\n"
+    "5. Si la pregunta es ambigua, responde con la interpretación más razonable "
+    "dentro del contexto municipal disponible.\n"
+    "6. Responde siempre en español."
 )
 
 
@@ -21,8 +32,8 @@ def generate_answer(question: str, context_chunks: list[dict]) -> str:
     """
     if not context_chunks:
         return (
-            "I could not find any relevant documents to answer your question. "
-            "Please upload documents first."
+            "No se encontraron documentos relevantes para responder su consulta. "
+            "Por favor, asegúrese de que los documentos estén cargados en el sistema."
         )
 
     context_parts = []
