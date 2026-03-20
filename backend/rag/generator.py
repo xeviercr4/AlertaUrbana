@@ -55,7 +55,7 @@ def generate_answer(question: str, context_chunks: list[dict]) -> str:
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": user_message},
         ],
-        temperature=0.2,
-        max_tokens=512,
+        temperature=0.1,
+        max_tokens=1024,
     )
     return response.choices[0].message.content.strip()
