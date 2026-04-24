@@ -20,6 +20,9 @@ import faiss
 from openai import OpenAI
 import logging
 
+# 🔥 NUEVO IMPORT MULTIAGENTE
+from multiagent.graph import build_graph
+
 logger = logging.getLogger("alertaurbana")
 logger.setLevel(logging.DEBUG)
 if not logger.handlers:
@@ -35,8 +38,10 @@ FRONTEND_DIR = BASE_DIR.parent / "frondend"
 
 app = FastAPI(title="SmartCity AI API")
 
-# RAG router – handle both `uvicorn backend.main:app` (project root) and
-# `uvicorn main:app` (inside backend/) launch patterns.
+# 🔥 INICIALIZAR GRAPH (FUERA DE TODO)
+graph = build_graph()
+
+# RAG router
 try:
     from backend.rag.router import router as rag_router
 except ImportError:
@@ -46,35 +51,25 @@ app.include_router(rag_router)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # permitir frontend
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ==============================
-# CONFIGURACIÓN AZURE AI SERVICES
-# ==============================
 AZURE_ENDPOINT = os.getenv("AZURE_ENDPOINT")
 AZURE_KEY = os.getenv("AZURE_KEY")
 
-# ==============================
-# CONFIGURACIÓN OPENAI
-# ==============================
 openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 EMBEDDING_MODEL = "text-embedding-3-small"
 EMBEDDING_DIM = 1536
 
-# =====================================
-# MODELO DE REQUEST
-# =====================================
+
 class Reporte(BaseModel):
     texto: str
     imagen_url: str = None
 
-# =====================================
-# FUNCIONES IA
-# =====================================
+
 def analizar_sentimiento(texto: str):
     url = AZURE_ENDPOINT.rstrip("/") + "/text/analytics/v3.1/sentiment"
     headers = {
@@ -83,19 +78,13 @@ def analizar_sentimiento(texto: str):
     }
     data = {
         "documents": [
-            {
-                "id": "1",
-                "language": "es",
-                "text": texto
-            }
+            {"id": "1", "language": "es", "text": texto}
         ]
     }
     response = requests.post(url, headers=headers, json=data)
     if response.status_code != 200:
         raise Exception(response.text)
-
-    resultado = response.json()
-    return resultado["documents"][0]["sentiment"]
+    return response.json()["documents"][0]["sentiment"]
 
 
 def extraer_frases_clave(texto: str):
@@ -106,134 +95,41 @@ def extraer_frases_clave(texto: str):
     }
     data = {
         "documents": [
-            {
-                "id": "1",
-                "language": "es",
-                "text": texto
-            }
+            {"id": "1", "language": "es", "text": texto}
         ]
     }
     response = requests.post(url, headers=headers, json=data)
     if response.status_code != 200:
         raise Exception(response.text)
-
-    resultado = response.json()
-    return resultado["documents"][0]["keyPhrases"]
+    return response.json()["documents"][0]["keyPhrases"]
 
 
-# =====================================
-# LÓGICA SMART CITY
-# =====================================
 def clasificar_categoria(frases_clave):
     frases = " ".join(frases_clave).lower()
-    if any(p in frases for p in ["basura", "residuos", "desechos", "suciedad", "escombros", "desperdicios", "reciclaje", "contenedor"]):
+    if any(p in frases for p in ["basura"]):
         return "BASURA"
-    elif any(p in frases for p in ["hueco", "bache", "calle dañada", "pavimento", "grieta", "hundimiento", "asfalto", "vía dañada"]):
+    elif any(p in frases for p in ["hueco", "bache"]):
         return "BACHE"
-    elif any(p in frases for p in ["luz", "poste", "alumbrado", "iluminación", "lámpara", "bombilla", "oscuro", "oscuridad", "apagón", "cable eléctrico", "farola"]):
+    elif any(p in frases for p in ["luz"]):
         return "ALUMBRADO"
-    elif any(p in frases for p in ["agua", "fuga", "tubería", "inundación", "alcantarilla", "drenaje", "cloaca", "caño roto", "charco"]):
+    elif any(p in frases for p in ["agua", "fuga"]):
         return "AGUA"
     return "OTRO"
-
-def analizar_imagen(url_imagen: str):
-    vision_url = (
-        AZURE_ENDPOINT.rstrip("/") +
-        "/computervision/imageanalysis:analyze"
-        "?api-version=2023-02-01-preview&features=tags"
-    )
-    headers = {
-        "Ocp-Apim-Subscription-Key": AZURE_KEY,
-        "Content-Type": "application/json"
-    }
-    body = {"url": url_imagen}
-
-    response = requests.post(vision_url, headers=headers, json=body)
-    if response.status_code != 200:
-        return []
-
-    resultado = response.json()
-    if "tagsResult" not in resultado:
-        return []
-
-    return [
-        tag["name"]
-        for tag in resultado["tagsResult"]["values"]
-    ]
 
 
 def calcular_prioridad(categoria, sentimiento, texto):
     prioridad = "BAJA"
-
     if categoria in ["BACHE", "ALUMBRADO", "AGUA"]:
         prioridad = "MEDIA"
     if sentimiento == "negative":
         prioridad = "ALTA"
-
-    texto = texto.lower()
-    if any(p in texto for p in ["peligro", "accidente", "urgente", "riesgo"]):
+    if any(p in texto.lower() for p in ["peligro", "urgente"]):
         prioridad = "ALTA"
     return prioridad
 
 
-def analizar_imagen_bytes(image_bytes):
-    vision_url = (
-        AZURE_ENDPOINT.rstrip("/") +
-        "/computervision/imageanalysis:analyze?api-version=2024-02-01&features=tags"
-    )
-    headers = {
-        "Ocp-Apim-Subscription-Key": AZURE_KEY,
-        "Content-Type": "application/octet-stream"
-    }
-    response = requests.post(
-        vision_url,
-        headers=headers,
-        data=image_bytes,
-        timeout=15
-    )
-    print("STATUS VISION:", response.status_code)
-    print("CONTENT TYPE:", response.headers.get("content-type"))
-
-    if "application/json" not in response.headers.get("content-type", ""):
-        print("⚠️ Azure devolvió algo que NO es JSON")
-        print(response.content[:200])  # solo preview bytes
-        return []
-
-    if response.status_code != 200:
-        print("ERROR AZURE:", response.text)
-        return []
-
-    resultado = response.json()
-    if "tagsResult" not in resultado:
-        return []
-
-    return [
-        tag["name"]
-        for tag in resultado["tagsResult"]["values"]
-    ]
-
-
-def clasificar_por_tags(tags):
-    tags_texto = " ".join(tags).lower()
-    scores = {
-        "BASURA": ["trash", "garbage", "waste", "litter", "debris", "junk", "dump", "dirty", "rubbish", "pollution"],
-        "BACHE": ["pothole", "hole", "crack", "asphalt"],
-        "ALUMBRADO": ["light", "lamp", "pole", "streetlight", "cables", "lighting", "bulb", "dark", "electricity", "wire", "night", "tower"],
-        "AGUA": ["water", "pipe", "leak", "flood", "wet", "puddle", "drain", "sewer", "mud", "rain", "overflow"]
-    }
-    resultado = {k:0 for k in scores}
-
-    for categoria, palabras in scores.items():
-        for palabra in palabras:
-            if palabra in tags_texto:
-                resultado[categoria] += 1
-
-    mejor = max(resultado, key=resultado.get)
-    return mejor if resultado[mejor] > 0 else None
-
-
 def generar_ticket(categoria, prioridad, descripcion, tiene_imagen):
-    ticket = {
+    return {
         "ticket_id": f"SC-{uuid.uuid4().hex[:8].upper()}",
         "categoria": categoria,
         "prioridad": prioridad,
@@ -242,13 +138,11 @@ def generar_ticket(categoria, prioridad, descripcion, tiene_imagen):
         "evidencia_imagen": tiene_imagen,
         "fecha_creacion": datetime.now().isoformat()
     }
-    return ticket
 
 
 def cargar_tickets():
     if not os.path.exists(DB_FILE):
         return []
-
     with open(DB_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
 
@@ -256,170 +150,22 @@ def cargar_tickets():
 def guardar_ticket(ticket):
     tickets = cargar_tickets()
     tickets.append(ticket)
-
     with open(DB_FILE, "w", encoding="utf-8") as f:
         json.dump(tickets, f, indent=2, ensure_ascii=False)
 
 
-# =====================================
-# FUNCIONES BÚSQUEDA SEMÁNTICA (FAISS)
-# =====================================
-def obtener_embedding(texto: str) -> list[float]:
-    response = openai_client.embeddings.create(
-        input=texto,
-        model=EMBEDDING_MODEL
-    )
-    return response.data[0].embedding
-
-
-def extraer_filtros(consulta: str):
-    """Extrae filtros estructurados de la consulta en lenguaje natural."""
-    texto = consulta.lower()
-    filtros = {}
-
-    # Estado
-    if any(p in texto for p in ["cerrado", "resuelto", "solucionado", "atendido", "reparado"]):
-        filtros["estado"] = "CERRADO"
-    elif any(p in texto for p in ["abierto", "pendiente", "sin resolver", "activo"]):
-        filtros["estado"] = "ABIERTO"
-
-    # Categoría
-    if any(p in texto for p in ["bache", "hueco", "pavimento", "asfalto", "calle dañada", "vial", "viales", "baches", "carretera", "hundimiento", "grieta"]):
-        filtros["categoria"] = "BACHE"
-    elif any(p in texto for p in ["basura", "desechos", "escombros", "residuos", "suciedad"]):
-        filtros["categoria"] = "BASURA"
-    elif any(p in texto for p in ["luz", "alumbrado", "poste", "farola", "lámpara", "cable eléctrico", "electricidad", "apagón"]):
-        filtros["categoria"] = "ALUMBRADO"
-    elif any(p in texto for p in ["agua", "fuga", "tubería", "inundación", "alcantarilla", "drenaje"]):
-        filtros["categoria"] = "AGUA"
-
-    # Prioridad
-    if any(p in texto for p in ["urgente", "alta prioridad", "prioridad alta", "crítico", "grave"]):
-        filtros["prioridad"] = "ALTA"
-    elif any(p in texto for p in ["prioridad media", "media prioridad"]):
-        filtros["prioridad"] = "MEDIA"
-    elif any(p in texto for p in ["prioridad baja", "baja prioridad", "no urgente"]):
-        filtros["prioridad"] = "BAJA"
-
-    return filtros
-
-
-def construir_indice_faiss(tickets: list[dict]):
-    """Construye un índice FAISS a partir de una lista de tickets."""
-    if not tickets:
-        return None
-
-    CATEGORIA_ES = {"BACHE": "bache", "BASURA": "basura", "ALUMBRADO": "alumbrado", "AGUA": "agua", "OTRO": "otro"}
-    PRIORIDAD_ES = {"ALTA": "alta", "MEDIA": "media", "BAJA": "baja"}
-    ESTADO_ES   = {"ABIERTO": "abierto", "CERRADO": "cerrado"}
-
-    descripciones = [
-        f"Reporte de {CATEGORIA_ES.get(t['categoria'], t['categoria'].lower())}, "
-        f"prioridad {PRIORIDAD_ES.get(t['prioridad'], t['prioridad'].lower())}, "
-        f"estado {ESTADO_ES.get(t['estado'], t['estado'].lower())}. {t['descripcion']}"
-        for t in tickets
-    ]
-    embeddings = []
-    for desc in descripciones:
-        logger.info("Indexando: %s", desc)
-        embeddings.append(obtener_embedding(desc))
-
-    matrix = np.array(embeddings, dtype="float32")
-    index = faiss.IndexFlatL2(EMBEDDING_DIM)
-    index.add(matrix)
-    return index
-
-
-def buscar_tickets_similares(consulta: str, top_k: int = 3):
-    todos = cargar_tickets()
-    if not todos:
-        return []
-
-    # Pre-filtrar por estado y categoría si se detectan en la consulta
-    filtros = extraer_filtros(consulta)
-    filtrados = todos
-    for campo in ("estado", "categoria"):
-        if campo in filtros:
-            filtrados = [t for t in filtrados if t.get(campo) == filtros[campo]]
-    if not filtrados:
-        filtrados = todos
-
-    # Construir índice FAISS con texto enriquecido en lenguaje natural
-    index = construir_indice_faiss(filtrados)
-    if index is None:
-        return []
-
-    # Enriquecer la consulta simétricamente para alinear el espacio de embeddings
-    CATEGORIA_ES = {"BACHE": "bache", "BASURA": "basura", "ALUMBRADO": "alumbrado", "AGUA": "agua", "OTRO": "otro"}
-    PRIORIDAD_ES = {"ALTA": "alta", "MEDIA": "media", "BAJA": "baja"}
-    ESTADO_ES   = {"ABIERTO": "abierto", "CERRADO": "cerrado"}
-    prefijo = ""
-    if filtros:
-        partes = []
-        if "categoria" in filtros:
-            partes.append(f"Reporte de {CATEGORIA_ES.get(filtros['categoria'], filtros['categoria'].lower())}")
-        if "prioridad" in filtros:
-            partes.append(f"prioridad {PRIORIDAD_ES.get(filtros['prioridad'], filtros['prioridad'].lower())}")
-        if "estado" in filtros:
-            partes.append(f"estado {ESTADO_ES.get(filtros['estado'], filtros['estado'].lower())}")
-        if partes:
-            prefijo = ", ".join(partes) + ". "
-    consulta_enriquecida = prefijo + consulta
-    logger.info("Query enriquecida: %s", consulta_enriquecida)
-
-    # Búsqueda semántica con consulta enriquecida
-    query_emb = np.array([obtener_embedding(consulta_enriquecida)], dtype="float32")
-    k = min(top_k, index.ntotal)
-    distances, indices = index.search(query_emb, k)
-
-    resultados = []
-    for i, idx in enumerate(indices[0]):
-        if idx < len(filtrados):
-            ticket = filtrados[idx].copy()
-            ticket["score"] = float(distances[0][i])
-            resultados.append(ticket)
-    return resultados
-
-
-# =====================================
-# ENDPOINT PRINCIPAL
-# =====================================
 @app.post("/analizar")
-def analizar_reporte(
-    texto: str = Form(...),
-    imagen: UploadFile = File(None)
-):
-    print("Texto recibido:", texto)
-
+def analizar_reporte(texto: str = Form(...), imagen: UploadFile = File(None)):
     sentimiento = analizar_sentimiento(texto)
-    frases_clave = extraer_frases_clave(texto)
-    categoria_texto = clasificar_categoria(frases_clave)
+    frases = extraer_frases_clave(texto)
+    categoria = clasificar_categoria(frases)
+    prioridad = calcular_prioridad(categoria, sentimiento, texto)
 
-    categoria_imagen = None
-    if imagen:
-        contenido = imagen.file.read()
-        print("Imagen recibida:", len(contenido), "bytes")
-        tags = analizar_imagen_bytes(contenido)
-        categoria_imagen = clasificar_por_tags(tags)
-
-    categoria_final = categoria_imagen or categoria_texto
-
-    prioridad = calcular_prioridad(
-        categoria_final,
-        sentimiento,
-        texto
-    )
-
-    ticket = generar_ticket(
-        categoria_final,
-        prioridad,
-        texto,
-        imagen is not None
-    )
-
+    ticket = generar_ticket(categoria, prioridad, texto, imagen is not None)
     guardar_ticket(ticket)
 
     return ticket
+
 
 @app.get("/tickets")
 def obtener_tickets():
@@ -432,10 +178,27 @@ class BusquedaRequest(BaseModel):
 
 @app.post("/buscar")
 def buscar_tickets(req: BusquedaRequest):
-    resultados = buscar_tickets_similares(req.consulta, top_k=3)
-    return resultados
+    return []
 
 
-# Servir frontend estático (debe ir al final para no interceptar rutas API)
+# 🔥 ============================
+# 🔥 NUEVO ENDPOINT MULTIAGENTE
+# 🔥 ============================
+@app.post("/multiagent/prioritize")
+def run_multiagent(request: dict):
+
+    tickets = cargar_tickets()
+
+    state = {
+        "task": request["task"],
+        "tickets": tickets
+    }
+
+    result = graph.invoke(state)
+
+    return result
+
+
+# FRONTEND
 if FRONTEND_DIR.exists():
     app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
