@@ -1,78 +1,187 @@
-body{
-    font-family: Arial;
-    background:#f4f6f8;
-    margin:40px;
+/* =========================
+   🌐 BASE
+========================= */
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f4f6f9;
+    margin: 0;
 }
 
-.container{
-    background:white;
-    padding:25px;
-    border-radius:12px;
-    width:600px;
-    margin:auto;
-    box-shadow:0px 4px 10px rgba(0,0,0,0.1);
+/* =========================
+   📦 CONTENEDOR
+========================= */
+.container {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    max-width: 900px;
+    margin: 40px auto;
+    box-shadow: 0px 6px 18px rgba(0,0,0,0.08);
 }
 
-textarea{
-    width:100%;
-    height:100px;
-    margin-top:10px;
+/* =========================
+   📝 INPUTS
+========================= */
+textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    margin-top: 10px;
+    box-sizing: border-box;
+    font-size: 14px;
 }
 
-input{
-    margin-top:10px;
+input {
+    margin-top: 10px;
 }
 
-button{
-    margin-top:15px;
-    padding:12px;
-    width:100%;
-    background:#0078D4;
-    color:white;
-    border:none;
-    cursor:pointer;
-    border-radius:6px;
+/* =========================
+   🔘 BOTONES
+========================= */
+button {
+    margin-top: 15px;
+    padding: 12px;
+    width: 100%;
+    background: #0078D4;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: 0.2s;
 }
 
-.preview{
-    margin-top:10px;
-    max-width:100%;
-    display:none;
+button:hover {
+    background: #005fa3;
 }
 
-.ticket{
-    margin-top:20px;
-    padding:15px;
-    border-radius:8px;
+/* =========================
+   🧾 TARJETAS
+========================= */
+.card {
+    background: white;
+    padding: 15px;
+    margin-top: 12px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.05);
 }
 
-.ALTA{ background:#ffcccc; }
-.MEDIA{ background:#fff3cd; }
-.BAJA{ background:#d4edda; }
-
-.card{
-    background:#eef2f7;
-    padding:10px;
-    margin-top:10px;
-    border-radius:6px;
+/* =========================
+   🎫 TICKETS
+========================= */
+.ticket {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
 }
 
-.busqueda-resultado{
-    border-left:4px solid #0078D4;
+.ALTA { background: #ffe5e5; }
+.MEDIA { background: #fff4cc; }
+.BAJA { background: #e6f7e6; }
+
+/* =========================
+   🔍 BUSQUEDA
+========================= */
+.busqueda-resultado {
+    border-left: 4px solid #0078D4;
 }
 
-.busqueda-resultado .estado{
-    display:inline-block;
-    margin-top:5px;
-    font-size:12px;
-    color:#555;
+.busqueda-resultado .estado {
+    display: inline-block;
+    margin-top: 5px;
+    font-size: 12px;
+    color: #555;
 }
 
-#consultaBusqueda{
-    width:100%;
-    padding:10px;
-    margin-top:10px;
-    border:1px solid #ccc;
-    border-radius:6px;
-    box-sizing:border-box;
+#consultaBusqueda {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+/* =========================
+   🧠 MULTIAGENTE
+========================= */
+
+/* resultado */
+#multiagentResult {
+    margin-top: 20px;
+}
+
+/* prioridades */
+.priority {
+    font-weight: bold;
+    padding: 6px 10px;
+    border-radius: 6px;
+    display: inline-block;
+    margin-top: 8px;
+}
+
+.priority.ALTA {
+    background: #ffe5e5;
+    color: #d60000;
+}
+
+.priority.MEDIA {
+    background: #fff4cc;
+    color: #b38f00;
+}
+
+.priority.BAJA {
+    background: #e6f7e6;
+    color: #2e7d32;
+}
+
+/* reporte */
+.report {
+    background: #ffffff;
+    padding: 18px;
+    border-radius: 12px;
+    margin-top: 20px;
+    line-height: 1.6;
+    box-shadow: 0px 4px 12px rgba(0,0,0,0.05);
+}
+
+/* loader */
+.loader {
+    color: #666;
+    font-style: italic;
+}
+
+/* =========================
+   📌 NAVBAR
+========================= */
+.main-nav {
+    background: #0078D4;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.nav-links a {
+    margin-left: 15px;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.nav-link.active {
+    font-weight: bold;
+    border-bottom: 2px solid white;
+}
+
+/* =========================
+   📷 PREVIEW
+========================= */
+.preview {
+    margin-top: 10px;
+    max-width: 100%;
+    display: none;
 }

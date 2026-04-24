@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SmartCity AI – Multiagente</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav class="main-nav">
+    <div class="nav-brand">🏙️ SmartCity AI</div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">🎫 Sistema de Tickets</a>
+      <a href="rag.html" class="nav-link">🤖 Asistente IA</a>
+      <a href="multiagent.html" class="nav-link active">🧠 Multiagente</a>
+    </div>
+  </nav>
+
+  <!-- CONTENIDO -->
+  <div class="container">
+
+    <h1>🧠 Sistema Multiagente</h1>
+    <p>Priorización inteligente de incidentes usando IA + RAG</p>
+
+    <h3>📝 Tarea</h3>
+
+    <textarea id="multiagentTask">
+Prioriza incidentes de agua según urgencia y normativa municipal
+    </textarea>
+
+    <button onclick="runMultiagent()">🚀 Ejecutar Multiagente</button>
+
+    <h3>📊 Resultado</h3>
+
+    <div id="multiagentResult" class="card"></div>
+
+  </div>
+
+  <script src="multiagent.js"></script>
+
+</body>
+</html>
