@@ -1,9 +1,22 @@
-async function runMultiagent() {
+window.runMultiagent = async function () {
 
     const task = document.getElementById("multiagentTask").value;
-    const resultBox = document.getElementById("multiagentResult");
 
-    resultBox.innerHTML = `<div class="loader">🤖 Procesando con agentes inteligentes...</div>`;
+    console.log("🚀 Ejecutando multiagente...");
+
+    // 🔥 Referencias correctas (EXISTEN en tu HTML)
+    const plannerBox = document.getElementById("plannerResult");
+    const researcherBox = document.getElementById("researcherResult");
+    const analystBox = document.getElementById("analystResult");
+    const decisionBox = document.getElementById("decisionResult");
+    const writerBox = document.getElementById("writerResult");
+
+    // loaders
+    if (plannerBox) plannerBox.innerHTML = "⏳ Ejecutando...";
+    if (researcherBox) researcherBox.innerHTML = "";
+    if (analystBox) analystBox.innerHTML = "";
+    if (decisionBox) decisionBox.innerHTML = "";
+    if (writerBox) writerBox.innerHTML = "";
 
     try {
         const response = await fetch("http://127.0.0.1:8000/multiagent/prioritize", {
@@ -16,11 +29,28 @@ async function runMultiagent() {
 
         const data = await response.json();
 
-        let html = "<h2>📊 Prioridades</h2>";
+        // 🧠 Planner
+        if (plannerBox && data.plan) {
+            plannerBox.innerHTML = `<pre>${data.plan}</pre>`;
+        }
 
-        if (Array.isArray(data.prioritized)) {
+        // 🔎 Researcher
+        if (researcherBox && data.rules) {
+            researcherBox.innerHTML = `<p>${data.rules}</p>`;
+        }
 
-            // 🔥 ORDEN PERSONALIZADO
+        // 📊 Analyst
+        if (analystBox && Array.isArray(data.analysis)) {
+            let html = "";
+            data.analysis.forEach(t => {
+                html += `<div class="card">${t.descripcion}</div>`;
+            });
+            analystBox.innerHTML = html;
+        }
+
+        // ⚖️ Decision (ordenado)
+        if (decisionBox && Array.isArray(data.prioritized)) {
+
             const prioridadOrden = {
                 "ALTA": 1,
                 "Alta": 1,
@@ -30,35 +60,35 @@ async function runMultiagent() {
                 "Baja": 3
             };
 
-            // 🔥 SORT
             const sorted = data.prioritized.sort((a, b) => {
                 return prioridadOrden[a.prioridad] - prioridadOrden[b.prioridad];
             });
 
-            // 🔥 RENDER
+            let html = "";
+
             sorted.forEach(t => {
                 html += `
                     <div class="card">
-                        <h3>${t.id}</h3>
+                        <strong>${t.id}</strong><br>
                         <span class="priority ${t.prioridad}">
                             ${t.prioridad}
                         </span>
                     </div>
                 `;
             });
+
+            decisionBox.innerHTML = html;
         }
 
-        html += `
-            <div class="report">
-                <h2>📝 Reporte</h2>
-                <p>${data.final.replace(/\n/g, "<br>")}</p>
-            </div>
-        `;
-
-        resultBox.innerHTML = html;
+        // ✍️ Writer
+        if (writerBox && data.final) {
+            writerBox.innerHTML =
+                `<div class="report">${data.final.replace(/\n/g, "<br>")}</div>`;
+        }
 
     } catch (error) {
-        resultBox.innerHTML = "❌ Error ejecutando multiagente";
         console.error(error);
+
+        if (plannerBox) plannerBox.innerHTML = "❌ Error";
     }
-}
+};

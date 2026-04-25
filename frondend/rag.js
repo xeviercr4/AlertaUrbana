@@ -36,7 +36,7 @@ async function sendQuestion() {
         const response = await fetch(`${API_BASE}/rag/query`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ query: question })
+            body: JSON.stringify({ question: question })
         });
 
         const data = await response.json();

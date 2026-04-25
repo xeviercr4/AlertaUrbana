@@ -26,6 +26,7 @@
     <h1>🧠 Sistema Multiagente</h1>
     <p>Priorización inteligente de incidentes usando IA + RAG</p>
 
+    <!-- INPUT -->
     <h3>📝 Tarea</h3>
 
     <textarea id="multiagentTask">
@@ -34,9 +35,42 @@ Prioriza incidentes de agua según urgencia y normativa municipal
 
     <button onclick="runMultiagent()">🚀 Ejecutar Multiagente</button>
 
-    <h3>📊 Resultado</h3>
+    <!-- PANEL DE MONITOREO -->
+    <h2 style="margin-top:30px;">🧠 Panel de Monitoreo de Agentes</h2>
 
-    <div id="multiagentResult" class="card"></div>
+    <div id="agent-monitor">
+
+      <!-- PLANNER -->
+      <div class="card">
+        <h3>🧠 Planner (Subtareas)</h3>
+        <div id="plannerResult"></div>
+      </div>
+
+      <!-- RESEARCHER -->
+      <div class="card">
+        <h3>🔎 Researcher (RAG)</h3>
+        <div id="researcherResult"></div>
+      </div>
+
+      <!-- ANALYST -->
+      <div class="card">
+        <h3>📊 Analyst</h3>
+        <div id="analystResult"></div>
+      </div>
+
+      <!-- DECISION -->
+      <div class="card">
+        <h3>⚖️ Decision (Prioridades)</h3>
+        <div id="decisionResult"></div>
+      </div>
+
+      <!-- WRITER -->
+      <div class="card">
+        <h3>✍️ Writer (Resultado Final)</h3>
+        <div id="writerResult"></div>
+      </div>
+
+    </div>
 
   </div>
 
