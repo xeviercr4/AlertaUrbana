@@ -54,9 +54,8 @@ def researcher_node(state):
         # así los documentos subidos vía /rag/upload son visibles aquí.
         vs = _get_vector_store()
         results = vs.search(query, top_k=3)
-        chunks = [r["text"] for r in results]
 
-        if not chunks:
+        if not results:
             state["rules"] = (
                 "Sin documentos en el vector store. Aplicar criterios estándar: "
                 "ALTA para riesgo a la vida o servicios esenciales (agua, alumbrado, "
@@ -64,11 +63,12 @@ def researcher_node(state):
                 "estéticos o no urgentes."
             )
         else:
-            state["rules"] = generate_answer(query, chunks)
+            # generate_answer espera dicts con keys 'text' y 'filename'
+            state["rules"] = generate_answer(query, results)
 
         logger.info(
             "RULES generadas a partir de %d chunks (vector_store total=%d)",
-            len(chunks), vs.total_chunks
+            len(results), vs.total_chunks
         )
     except Exception as e:
         logger.exception("Error en researcher: %s", e)
