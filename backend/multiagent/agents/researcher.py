@@ -1,20 +1,14 @@
 import logging
-from pathlib import Path
 
 try:
-    from backend.rag.vector_store import VectorStore
+    from backend.rag.router import _get_vector_store
     from backend.rag.generator import generate_answer
 except ImportError:
-    from rag.vector_store import VectorStore
+    from rag.router import _get_vector_store
     from rag.generator import generate_answer
 
 
 logger = logging.getLogger("alertaurbana.multiagent.researcher")
-
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
-DATA_DIR = BASE_DIR / "rag_data"
-
-vector_store = VectorStore(DATA_DIR)
 
 
 def _domain_context(task: str) -> str:
@@ -56,7 +50,10 @@ def researcher_node(state):
     )
 
     try:
-        results = vector_store.search(query, top_k=3)
+        # Reusa el mismo singleton de VectorStore que usa el router de RAG,
+        # así los documentos subidos vía /rag/upload son visibles aquí.
+        vs = _get_vector_store()
+        results = vs.search(query, top_k=3)
         chunks = [r["text"] for r in results]
 
         if not chunks:
@@ -69,7 +66,10 @@ def researcher_node(state):
         else:
             state["rules"] = generate_answer(query, chunks)
 
-        logger.info("RULES generadas a partir de %d chunks", len(chunks))
+        logger.info(
+            "RULES generadas a partir de %d chunks (vector_store total=%d)",
+            len(chunks), vs.total_chunks
+        )
     except Exception as e:
         logger.exception("Error en researcher: %s", e)
         state["rules"] = "Error consultando el RAG; aplicar criterios estándar."
