@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/usr/bin/head -20)",
+      "Bash(docker build *)",
+      "Bash(/usr/bin/tail -10)",
+      "Bash(docker run --rm --name alertaurbana_smoke -e OPENAI_API_KEY=sk-fake-for-import-test alertaurbana:multiagente python -c ' *)",
+      "Bash(/usr/bin/tail -5)",
+      "Bash(docker run --rm -e OPENAI_API_KEY=sk-fake alertaurbana:multiagente python -c ' *)",
+      "Bash(docker run *)",
+      "Bash(curl -s -o /dev/null -w \"GET /tickets → HTTP %{http_code}\\\\n\" http://localhost:8765/tickets)",
+      "Bash(curl -s -o /dev/null -w \"GET /chat.html → HTTP %{http_code}\\\\n\" http://localhost:8765/chat.html)",
+      "Bash(curl -s -o /dev/null -w \"GET /multiagent.html → HTTP %{http_code}\\\\n\" http://localhost:8765/multiagent.html)",
+      "Bash(docker stop *)"
+    ]
+  }
+}

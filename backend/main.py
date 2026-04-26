@@ -21,7 +21,10 @@ from openai import OpenAI
 import logging
 
 # 🔥 NUEVO IMPORT MULTIAGENTE
-from multiagent.graph import build_graph
+try:
+    from backend.multiagent.graph import build_graph
+except ImportError:
+    from multiagent.graph import build_graph
 
 logger = logging.getLogger("alertaurbana")
 logger.setLevel(logging.DEBUG)

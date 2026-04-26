@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SmartCity AI – Chat Multiagente</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <nav class="main-nav">
+    <div class="nav-brand">🏙️ SmartCity AI</div>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">🎫 Sistema de Tickets</a>
+      <a href="rag.html" class="nav-link">🤖 Asistente IA</a>
+      <a href="chat.html" class="nav-link active">💬 Chat Multiagente</a>
+      <a href="multiagent.html" class="nav-link">📊 Monitor de Agentes</a>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <h1>💬 Chat Multiagente</h1>
+    <p>Conversa con el sistema multiagente en lenguaje natural. Para ver el desglose
+    paso a paso de cada agente, abrí <a href="multiagent.html">📊 Monitor de Agentes</a>.</p>
+
+    <h3>📝 Tu solicitud</h3>
+    <textarea id="chatTask" placeholder="Ej: Generá un plan de acción priorizando los baches y problemas de agua reportados esta semana."></textarea>
+
+    <button onclick="runChat()">🚀 Enviar</button>
+
+    <div id="chatStatus" class="agent-text" style="margin-top:16px;"></div>
+
+    <h2 style="margin-top:30px;">✅ Respuesta final</h2>
+    <div class="card">
+      <div id="chatResult" class="agent-text">
+        <em>Esperando solicitud...</em>
+      </div>
+    </div>
+
+    <h3 style="margin-top:24px;">🔍 Verificación de calidad</h3>
+    <div class="card">
+      <div id="chatVerification" class="agent-text">—</div>
+    </div>
+
+  </div>
+
+  <script src="chat.js?v=1"></script>
+
+</body>
+</html>

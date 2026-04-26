@@ -10,3 +10,5 @@ faiss-cpu
 numpy
 pypdf
 python-docx
+langchain-openai
+langgraph

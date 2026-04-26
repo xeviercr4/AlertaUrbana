@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SmartCity AI – Multiagente</title>
+  <title>SmartCity AI – Monitor de Agentes</title>
 
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -16,15 +16,17 @@
     <div class="nav-links">
       <a href="index.html" class="nav-link">🎫 Sistema de Tickets</a>
       <a href="rag.html" class="nav-link">🤖 Asistente IA</a>
-      <a href="multiagent.html" class="nav-link active">🧠 Multiagente</a>
+      <a href="chat.html" class="nav-link">💬 Chat Multiagente</a>
+      <a href="multiagent.html" class="nav-link active">📊 Monitor de Agentes</a>
     </div>
   </nav>
 
   <!-- CONTENIDO -->
   <div class="container">
 
-    <h1>🧠 Sistema Multiagente</h1>
-    <p>Priorización inteligente de incidentes usando IA + RAG</p>
+    <h1>📊 Monitor de Agentes</h1>
+    <p>Visualizá la ejecución paso a paso del sistema multiagente. Para una experiencia
+    estilo chat, abrí <a href="chat.html">💬 Chat Multiagente</a>.</p>
 
     <!-- INPUT -->
     <h3>📝 Tarea</h3>
@@ -67,6 +69,12 @@
       <div class="card">
         <h3>✍️ Writer (Resultado Final)</h3>
         <div id="writerResult"></div>
+      </div>
+
+      <!-- VERIFIER -->
+      <div class="card">
+        <h3>✅ Verifier (Gate de calidad)</h3>
+        <div id="verifierResult"></div>
       </div>
 
     </div>

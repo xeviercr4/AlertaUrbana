@@ -6,7 +6,7 @@ from .agents.researcher import researcher_node
 from .agents.analyst import analyst_node
 from .agents.decision import decision_node
 from .agents.writer import writer_node
-from .agents.verifier import verifier_node
+from .agents.verifier import verifier_node, verifier_router
 
 
 def build_graph():
@@ -27,6 +27,12 @@ def build_graph():
     builder.add_edge("analyst", "decision")
     builder.add_edge("decision", "writer")
     builder.add_edge("writer", "verifier")
-    builder.add_edge("verifier", END)
+
+    # Verifier es un gate: si REVIEW → vuelve a writer, si OK o se agotaron intentos → END
+    builder.add_conditional_edges(
+        "verifier",
+        verifier_router,
+        {"retry": "writer", "end": END},
+    )
 
     return builder.compile()

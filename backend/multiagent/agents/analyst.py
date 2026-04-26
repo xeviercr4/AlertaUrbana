@@ -1,7 +1,9 @@
-from openai import OpenAI
-import os
 import json
+import logging
+import os
+from openai import OpenAI
 
+logger = logging.getLogger("alertaurbana.multiagent.analyst")
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def analyst_node(state):
@@ -67,25 +69,26 @@ RESPONDE SOLO EN JSON (sin texto adicional):
 """
 
     response = client.chat.completions.create(
-        model="gpt-5.4",
+        model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": "Eres un analista experto en gestión municipal."},
             {"role": "user", "content": prompt}
         ],
         temperature=0.2,
-        max_completion_tokens=900
+        max_tokens=900
     )
 
     content = response.choices[0].message.content.strip()
+    if content.startswith("```"):
+        content = content.replace("```json", "").replace("```", "").strip()
 
     try:
         analysis = json.loads(content)
-    except:
-        print("⚠️ Error parseando JSON del analyst")
+    except json.JSONDecodeError:
+        logger.warning("Error parseando JSON del analyst; devolviendo lista vacía")
         analysis = []
 
     state["analysis"] = analysis
-
-    print("📊 ANALYSIS:", analysis)
+    logger.info("ANALYSIS: %d items", len(analysis) if isinstance(analysis, list) else 0)
 
     return state

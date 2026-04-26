@@ -21,6 +21,7 @@ window.runMultiagent = async function () {
     const analystBox = document.getElementById("analystResult");
     const decisionBox = document.getElementById("decisionResult");
     const writerBox = document.getElementById("writerResult");
+    const verifierBox = document.getElementById("verifierResult");
 
     // loaders
     if (plannerBox) plannerBox.innerHTML = "⏳ Ejecutando...";
@@ -28,6 +29,7 @@ window.runMultiagent = async function () {
     if (analystBox) analystBox.innerHTML = "";
     if (decisionBox) decisionBox.innerHTML = "";
     if (writerBox) writerBox.innerHTML = "";
+    if (verifierBox) verifierBox.innerHTML = "";
 
     try {
         const response = await fetch("http://127.0.0.1:8000/multiagent/prioritize", {
@@ -95,6 +97,24 @@ window.runMultiagent = async function () {
         if (writerBox && data.final) {
             writerBox.innerHTML =
                 `<div class="report agent-text">${formatText(data.final)}</div>`;
+        }
+
+        // ✅ Verifier
+        if (verifierBox) {
+            const v = data.verification || {};
+            const status = v.status || "—";
+            const feedback = v.feedback || "Sin observaciones.";
+            const attempts = data.attempts || 1;
+            const badge = status === "OK"
+                ? '<span class="priority ALTA" style="background:#2ecc71">OK</span>'
+                : '<span class="priority MEDIA">REVIEW</span>';
+            verifierBox.innerHTML = `
+                <div class="agent-text">
+                    ${badge}
+                    <p><strong>Intentos:</strong> ${attempts}</p>
+                    <p><strong>Feedback:</strong> ${formatText(feedback)}</p>
+                </div>
+            `;
         }
 
     } catch (error) {

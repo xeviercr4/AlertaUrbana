@@ -1,4 +1,4 @@
-from typing import TypedDict, List, Dict
+from typing import TypedDict, List, Dict, Any
 
 class AgentState(TypedDict, total=False):
     task: str
@@ -6,5 +6,7 @@ class AgentState(TypedDict, total=False):
     rules: str
     tickets: List[Dict]
     analysis: List[Dict]
-    prioritized: str
+    prioritized: Any
     final: str
+    verification: Dict[str, str]
+    attempts: int
