@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 920" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#c0392b"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#27ae60"/>
+    </marker>
+  </defs>
+
+  <text x="550" y="20" text-anchor="middle" font-size="20" font-weight="bold" fill="#222">AlertaUrbana — Arquitectura Multiagente</text>
+
+  <!-- ============================================================== -->
+  <!-- CAPA 1: INTERFAZ                                                 -->
+  <!-- ============================================================== -->
+  <rect x="20" y="40" width="1060" height="150" fill="#e3f2fd" stroke="#1976d2" stroke-width="1.5" rx="10"/>
+  <text x="40" y="68" font-size="15" font-weight="bold" fill="#0d47a1">1 · Capa de interfaz</text>
+
+  <rect x="220" y="90" width="240" height="75" fill="#fff" stroke="#1976d2" stroke-width="1.5" rx="6"/>
+  <text x="340" y="120" text-anchor="middle" font-size="14" font-weight="bold">Chat Multiagente</text>
+  <text x="340" y="140" text-anchor="middle" font-size="11" fill="#555">chat.html · UX usuario final</text>
+  <text x="340" y="156" text-anchor="middle" font-size="11" fill="#555">solo respuesta sintetizada</text>
+
+  <rect x="640" y="90" width="240" height="75" fill="#fff" stroke="#1976d2" stroke-width="1.5" rx="6"/>
+  <text x="760" y="120" text-anchor="middle" font-size="14" font-weight="bold">Monitor de Agentes</text>
+  <text x="760" y="140" text-anchor="middle" font-size="11" fill="#555">multiagent.html · auditoría</text>
+  <text x="760" y="156" text-anchor="middle" font-size="11" fill="#555">salida de cada agente</text>
+
+  <line x1="340" y1="165" x2="540" y2="218" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="760" y1="165" x2="560" y2="218" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="550" y="208" text-anchor="middle" font-size="11" fill="#555" font-style="italic">POST /multiagent/prioritize</text>
+
+  <!-- ============================================================== -->
+  <!-- CAPA 2: ORQUESTACIÓN                                             -->
+  <!-- ============================================================== -->
+  <rect x="20" y="220" width="1060" height="100" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="1.5" rx="10"/>
+  <text x="40" y="248" font-size="15" font-weight="bold" fill="#4a148c">2 · Capa de orquestación</text>
+
+  <rect x="280" y="260" width="540" height="50" fill="#fff" stroke="#7b1fa2" stroke-width="1.5" rx="6"/>
+  <text x="550" y="285" text-anchor="middle" font-size="14" font-weight="bold">FastAPI  ·  LangGraph StateGraph</text>
+  <text x="550" y="302" text-anchor="middle" font-size="11" fill="#555">recibe tarea · invoca el grafo · devuelve estado completo</text>
+
+  <line x1="550" y1="320" x2="550" y2="350" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ============================================================== -->
+  <!-- CAPA 3: AGENTES                                                  -->
+  <!-- ============================================================== -->
+  <rect x="20" y="350" width="1060" height="380" fill="#fff8e1" stroke="#f57f17" stroke-width="1.5" rx="10"/>
+  <text x="40" y="378" font-size="15" font-weight="bold" fill="#e65100">3 · Capa de agentes (LangGraph)</text>
+
+  <!-- Pipeline horizontal -->
+  <!-- Planner -->
+  <rect x="50" y="450" width="140" height="65" fill="#fff" stroke="#f57f17" stroke-width="1.5" rx="6"/>
+  <text x="120" y="475" text-anchor="middle" font-size="14" font-weight="bold">Planner</text>
+  <text x="120" y="492" text-anchor="middle" font-size="10" fill="#555">descompone</text>
+  <text x="120" y="506" text-anchor="middle" font-size="10" fill="#555">la tarea</text>
+
+  <!-- Researcher -->
+  <rect x="215" y="450" width="140" height="65" fill="#fff" stroke="#f57f17" stroke-width="1.5" rx="6"/>
+  <text x="285" y="475" text-anchor="middle" font-size="14" font-weight="bold">Researcher</text>
+  <text x="285" y="492" text-anchor="middle" font-size="10" fill="#555">RAG sobre</text>
+  <text x="285" y="506" text-anchor="middle" font-size="10" fill="#555">normativa municipal</text>
+
+  <!-- Analyst -->
+  <rect x="380" y="450" width="140" height="65" fill="#fff" stroke="#f57f17" stroke-width="1.5" rx="6"/>
+  <text x="450" y="475" text-anchor="middle" font-size="14" font-weight="bold">Analyst</text>
+  <text x="450" y="492" text-anchor="middle" font-size="10" fill="#555">analiza tickets</text>
+  <text x="450" y="506" text-anchor="middle" font-size="10" fill="#555">+ riesgo</text>
+
+  <!-- Decision -->
+  <rect x="545" y="450" width="140" height="65" fill="#fff" stroke="#f57f17" stroke-width="1.5" rx="6"/>
+  <text x="615" y="475" text-anchor="middle" font-size="14" font-weight="bold">Decision</text>
+  <text x="615" y="492" text-anchor="middle" font-size="10" fill="#555">prioridad final</text>
+  <text x="615" y="506" text-anchor="middle" font-size="10" fill="#555">ALTA / MEDIA / BAJA</text>
+
+  <!-- Writer -->
+  <rect x="710" y="450" width="140" height="65" fill="#fff" stroke="#f57f17" stroke-width="1.5" rx="6"/>
+  <text x="780" y="475" text-anchor="middle" font-size="14" font-weight="bold">Writer</text>
+  <text x="780" y="492" text-anchor="middle" font-size="10" fill="#555">plan ejecutivo</text>
+  <text x="780" y="506" text-anchor="middle" font-size="10" fill="#555">por días + equipos</text>
+
+  <!-- Verifier -->
+  <rect x="875" y="450" width="140" height="65" fill="#fff" stroke="#c0392b" stroke-width="2" rx="6"/>
+  <text x="945" y="475" text-anchor="middle" font-size="14" font-weight="bold" fill="#c0392b">Verifier</text>
+  <text x="945" y="492" text-anchor="middle" font-size="10" fill="#555">gate de calidad</text>
+  <text x="945" y="506" text-anchor="middle" font-size="10" fill="#555">OK / REVIEW</text>
+
+  <!-- Flechas pipeline -->
+  <line x1="190" y1="482" x2="215" y2="482" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="355" y1="482" x2="380" y2="482" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="520" y1="482" x2="545" y2="482" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="685" y1="482" x2="710" y2="482" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="850" y1="482" x2="875" y2="482" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Retry curva: Verifier → Writer -->
+  <path d="M 945 450 C 945 400, 780 400, 780 450" stroke="#c0392b" stroke-width="2" fill="none" marker-end="url(#arrowRed)"/>
+  <text x="862" y="395" text-anchor="middle" font-size="11" font-weight="bold" fill="#c0392b">retry si REVIEW</text>
+  <text x="862" y="410" text-anchor="middle" font-size="10" fill="#c0392b">(add_conditional_edges)</text>
+
+  <!-- OK → END -->
+  <line x1="945" y1="515" x2="945" y2="600" stroke="#27ae60" stroke-width="2" marker-end="url(#arrowGreen)"/>
+  <text x="958" y="555" font-size="12" font-weight="bold" fill="#27ae60">OK</text>
+
+  <rect x="905" y="605" width="80" height="35" fill="#27ae60" stroke="#27ae60" stroke-width="1.5" rx="6"/>
+  <text x="945" y="628" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">END</text>
+
+  <!-- Vector store debajo del researcher -->
+  <rect x="215" y="555" width="140" height="55" fill="#fff" stroke="#f57f17" stroke-width="1" stroke-dasharray="4,3" rx="6"/>
+  <text x="285" y="577" text-anchor="middle" font-size="12" font-weight="bold">Vector Store</text>
+  <text x="285" y="594" text-anchor="middle" font-size="10" fill="#555">FAISS IndexFlatL2</text>
+  <text x="285" y="606" text-anchor="middle" font-size="10" fill="#555">backend/rag_data/vector_store</text>
+  <line x1="285" y1="515" x2="285" y2="555" stroke="#999" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#arrow)"/>
+  <text x="365" y="540" font-size="10" fill="#999" font-style="italic">search top-k</text>
+
+  <!-- Tickets y normativa (entradas) -->
+  <rect x="50" y="555" width="140" height="55" fill="#fff" stroke="#f57f17" stroke-width="1" stroke-dasharray="4,3" rx="6"/>
+  <text x="120" y="577" text-anchor="middle" font-size="12" font-weight="bold">Tickets</text>
+  <text x="120" y="594" text-anchor="middle" font-size="10" fill="#555">tickets.json</text>
+  <text x="120" y="606" text-anchor="middle" font-size="10" fill="#555">reportes ciudadanos</text>
+  <line x1="120" y1="555" x2="120" y2="515" stroke="#999" stroke-width="1.2" stroke-dasharray="3,2"/>
+
+  <!-- Estado compartido label -->
+  <text x="550" y="690" text-anchor="middle" font-size="12" font-style="italic" fill="#666">
+    AgentState compartido: task · plan · rules · tickets · analysis · prioritized · final · verification · attempts
+  </text>
+
+  <!-- Flecha hacia capa 4 -->
+  <line x1="550" y1="730" x2="550" y2="765" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ============================================================== -->
+  <!-- CAPA 4: GENERACIÓN                                               -->
+  <!-- ============================================================== -->
+  <rect x="20" y="765" width="1060" height="130" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1.5" rx="10"/>
+  <text x="40" y="793" font-size="15" font-weight="bold" fill="#1b5e20">4 · Capa de generación</text>
+
+  <rect x="80" y="815" width="290" height="60" fill="#fff" stroke="#2e7d32" stroke-width="1.5" rx="6"/>
+  <text x="225" y="838" text-anchor="middle" font-size="13" font-weight="bold">OpenAI GPT-4o-mini</text>
+  <text x="225" y="857" text-anchor="middle" font-size="10" fill="#555">razonamiento de los agentes LLM</text>
+
+  <rect x="405" y="815" width="290" height="60" fill="#fff" stroke="#2e7d32" stroke-width="1.5" rx="6"/>
+  <text x="550" y="838" text-anchor="middle" font-size="13" font-weight="bold">text-embedding-3-small</text>
+  <text x="550" y="857" text-anchor="middle" font-size="10" fill="#555">embeddings · 1536 dims · para RAG</text>
+
+  <rect x="730" y="815" width="290" height="60" fill="#fff" stroke="#2e7d32" stroke-width="1.5" rx="6"/>
+  <text x="875" y="838" text-anchor="middle" font-size="13" font-weight="bold">FAISS · búsqueda vectorial</text>
+  <text x="875" y="857" text-anchor="middle" font-size="10" fill="#555">índice persistente en disco</text>
+
+</svg>
