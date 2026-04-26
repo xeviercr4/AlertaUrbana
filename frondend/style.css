@@ -208,3 +208,29 @@ button:hover {
 #agent-monitor h3 {
     margin-bottom: 10px;
 }
+
+/* 🔥 TEXTO UNIFICADO PARA AGENTES */
+.agent-text {
+    line-height: 1.6;
+    font-size: 14px;
+    color: #333;
+}
+
+/* títulos dentro de agentes */
+.agent-text h2,
+.agent-text h3,
+.agent-text h4 {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+/* evita que texto se salga */
+#agent-monitor .card {
+    overflow: hidden;
+}
+
+#agent-monitor .card div {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}

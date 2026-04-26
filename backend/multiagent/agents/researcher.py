@@ -13,46 +13,50 @@ vector_store = VectorStore(DATA_DIR)
 
 def researcher_node(state):
 
-    # 🧠 1. Obtener la tarea del usuario
-    task = state.get("task", "").strip()
+    task = state.get("task", "").strip().lower()
 
     if not task:
         state["rules"] = "No se proporcionó una tarea válida."
         return state
 
-    # 🔥 2. Query enriquecida (mejor contexto para el RAG)
+    # 🧠 DETECCIÓN DE DOMINIO
+    if "basura" in task or "residuos" in task or "desechos" in task:
+        context = """
+        normativa de manejo de residuos sólidos, recolección de basura,
+        sanciones por mala disposición de residuos, horarios de recolección,
+        obligaciones del ciudadano, multas por contaminación.
+        """
+    else:
+        context = """
+        normativa del servicio de agua potable, sanciones, multas,
+        suspensión del servicio, reconexión, obligaciones del abonado.
+        """
+
+    # 🔥 QUERY FINAL
     query = f"""
-    normativa del servicio de agua potable, sanciones, multas,
-    suspensión del servicio, reconexión, obligaciones del abonado.
+    {context}
     Consulta del usuario: {task}
     """
 
     try:
-        # 🔎 3. LLAMAR AL RAG REAL (endpoint que ya funciona)
+        import requests
+
         response = requests.post(
             "http://127.0.0.1:8000/rag/query",
             json={"question": query}
         )
 
-        # 🚨 4. Validar respuesta
         if response.status_code != 200:
             state["rules"] = "Error consultando el sistema RAG."
-            print("❌ ERROR STATUS:", response.status_code)
             return state
 
         data = response.json()
 
-        # 🧠 5. Extraer respuesta del RAG
-        result = data.get("answer", "Sin respuesta del RAG")
-
-        # 💾 6. Guardar resultado
-        state["rules"] = result
-
-        print("🔎 RULES:", result)
+        state["rules"] = data.get("answer", "Sin respuesta del RAG")
 
         return state
 
     except Exception as e:
-        print("❌ ERROR RAG:", e)
+        print("❌ ERROR:", e)
         state["rules"] = "Error conectando con el RAG."
         return state

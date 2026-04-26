@@ -1,25 +1,39 @@
-from langchain_openai import ChatOpenAI
+from openai import OpenAI
+import os
 
-llm = ChatOpenAI(model="gpt-4o-mini")
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def writer_node(state):
 
-    prompt = f"""
-Genera un reporte ejecutivo claro para la municipalidad.
+    prioritized = state.get("prioritized", [])
+    rules = state.get("rules", "")
 
-Incluye:
-- Top 5 incidentes más críticos
-- Resumen general
-- Recomendaciones
+    incidents_text = "\n".join([
+        f"{i+1}. {t.get('id')} - {t.get('descripcion')} (Prioridad: {t.get('prioridad')})"
+        for i, t in enumerate(prioritized)
+    ])
 
-Datos:
-{state['prioritized']}
+    prompt = f"""Tu trabajo es crear un plan estratégico para resolver los incidentes.
+Para el plan estratégico debes tomar en consideración:
+1)	La priorización de los ticketes.
+2)	Solucionar varios problemas de un mismo lugar o cercano para optimizar traslados.
+3)	Herramientas necesarias a transportar para enviar. En algunas situaciones puede convenir resolver un tipo de ticket porque ya tienes a los expertos en el campo.
+Como resultado final crear un plan de acción estrategico dividido por días y equipo necesario para resolver los incidentes."
 """
+    response = client.chat.completions.create(
+        model="gpt-5.4",
+        messages=[
+            {"role": "system", "content": "Eres un sistema de planificación municipal."},
+            {"role": "user", "content": prompt}
+        ],
+        temperature=0.2,
+        max_completion_tokens=700
+    )
 
-    response = llm.invoke(prompt)
+    result = response.choices[0].message.content.strip()
 
-    state["final"] = response.content
+    state["final"] = result
 
-    print("✍️ REPORT:", state["final"])
+    print("✍️ WRITER:", result)
 
     return state

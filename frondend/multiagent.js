@@ -1,10 +1,21 @@
+// 🔥 FORMATEADOR GLOBAL (CLAVE)
+function formatText(text) {
+    if (!text) return "";
+
+    return text
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") // negritas
+        .replace(/### (.*?)/g, "<h4>$1</h4>")             // títulos
+        .replace(/## (.*?)/g, "<h3>$1</h3>")
+        .replace(/# (.*?)/g, "<h2>$1</h2>")
+        .replace(/\n/g, "<br>");                         // saltos de línea
+}
+
 window.runMultiagent = async function () {
 
     const task = document.getElementById("multiagentTask").value;
 
     console.log("🚀 Ejecutando multiagente...");
 
-    // 🔥 Referencias correctas (EXISTEN en tu HTML)
     const plannerBox = document.getElementById("plannerResult");
     const researcherBox = document.getElementById("researcherResult");
     const analystBox = document.getElementById("analystResult");
@@ -31,19 +42,19 @@ window.runMultiagent = async function () {
 
         // 🧠 Planner
         if (plannerBox && data.plan) {
-            plannerBox.innerHTML = `<pre>${data.plan}</pre>`;
+            plannerBox.innerHTML = `<div class="agent-text">${formatText(data.plan)}</div>`;
         }
 
         // 🔎 Researcher
         if (researcherBox && data.rules) {
-            researcherBox.innerHTML = `<p>${data.rules}</p>`;
+            researcherBox.innerHTML = `<div class="agent-text">${formatText(data.rules)}</div>`;
         }
 
         // 📊 Analyst
         if (analystBox && Array.isArray(data.analysis)) {
             let html = "";
             data.analysis.forEach(t => {
-                html += `<div class="card">${t.descripcion}</div>`;
+                html += `<div class="card agent-text">${formatText(t.descripcion)}</div>`;
             });
             analystBox.innerHTML = html;
         }
@@ -83,7 +94,7 @@ window.runMultiagent = async function () {
         // ✍️ Writer
         if (writerBox && data.final) {
             writerBox.innerHTML =
-                `<div class="report">${data.final.replace(/\n/g, "<br>")}</div>`;
+                `<div class="report agent-text">${formatText(data.final)}</div>`;
         }
 
     } catch (error) {
