@@ -185,3 +185,26 @@ button:hover {
     max-width: 100%;
     display: none;
 }
+
+/* 🔥 FIX PARA TEXTO LARGO EN AGENTES */
+#agent-monitor .card {
+    overflow: hidden;
+}
+
+#agent-monitor .card div {
+    white-space: pre-wrap;        /* mantiene saltos de línea */
+    word-wrap: break-word;        /* rompe palabras largas */
+    overflow-wrap: break-word;    /* evita desbordes */
+}
+
+/* 🔥 opcional: mejor formato */
+#agent-monitor .card {
+    padding: 15px;
+    border-radius: 10px;
+    background: #eef2f7;
+}
+
+/* 🔥 opcional: títulos */
+#agent-monitor h3 {
+    margin-bottom: 10px;
+}

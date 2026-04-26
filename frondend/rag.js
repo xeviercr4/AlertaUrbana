@@ -41,6 +41,8 @@ async function sendQuestion() {
 
         const data = await response.json();
 
+        console.log("🔥 RESPONSE RAG:", data);
+
         removeLastBotMessage();
         appendMessage("bot", data.answer || "Sin respuesta");
 
